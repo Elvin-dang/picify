@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase";
-import { setUserState } from "../../shared/slices/user.slice";
 
 interface SignInState {
   loading: boolean;
@@ -17,27 +16,8 @@ const initialState: SignInState = {
 
 export const signInAsyncAction = createAsyncThunk(
   "signIn/signIn",
-  async (
-    { username, password }: { username: string; password: string },
-    thunkAPI,
-  ) => {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      username,
-      password,
-    );
-    const user = userCredential.user;
-    const token = await user.getIdToken();
-    thunkAPI.dispatch(
-      setUserState({
-        accessToken: token,
-        displayName: user.displayName,
-        email: user.email,
-        emailVerified: user.emailVerified,
-        photoURL: user.photoURL,
-        uid: user.uid,
-      }),
-    );
+  async ({ username, password }: { username: string; password: string }) => {
+    await signInWithEmailAndPassword(auth, username, password);
     return;
   },
 );
@@ -48,6 +28,9 @@ const signInSlice = createSlice({
   reducers: {
     setSignInState: (state, action: PayloadAction<Partial<SignInState>>) => {
       return { ...state, ...action.payload };
+    },
+    resetSignInState: () => {
+      return initialState;
     },
   },
   extraReducers: {
@@ -67,5 +50,5 @@ const signInSlice = createSlice({
   },
 });
 
-export const { setSignInState } = signInSlice.actions;
+export const { setSignInState, resetSignInState } = signInSlice.actions;
 export default signInSlice.reducer;

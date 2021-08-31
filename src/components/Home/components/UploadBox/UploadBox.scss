@@ -1,0 +1,96 @@
+.UBContainer {
+  width: 430px;
+
+  & .UBWrapper {
+    position: relative;
+    min-height: 300px;
+    width: 100%;
+    border: 2px dashed #c2cdda;
+    background: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    &.active {
+      border: none;
+
+      &:hover #UBCancelButton {
+        display: block;
+      }
+
+      &:hover .UBFileName {
+        display: block;
+      }
+    }
+
+    & .UBImage {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      & img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+
+    & .UBIcon {
+      font-size: 100px;
+      color: #9658fe;
+    }
+
+    & .UBText {
+      font-size: 20px;
+      color: #5b5b7b;
+      font-weight: 500;
+    }
+
+    & #UBCancelButton {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #9658fe;
+      display: none;
+
+      &:hover {
+        color: #e74c3c;
+      }
+    }
+
+    & .UBFileName {
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
+      color: #fff;
+      padding: 8px 0;
+      font-size: 18px;
+      display: none;
+      background: linear-gradient(135deg, #3a8ffe 0%, #9658fe 100%);
+    }
+  }
+
+  & #UBCustomButton {
+    margin-top: 30px;
+    width: 100%;
+    height: 50px;
+    display: block;
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    outline: none;
+    background: linear-gradient(135deg, #3a8ffe 0%, #9658fe 100%);
+  }
+}

@@ -3,33 +3,35 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppDispatch, RootState } from "../../config/store";
-import { resetSignUpState } from "../SignUp/SignUp.slice";
-import "./SignIn.scss";
-import { signInAsyncAction } from "./SignIn.slice";
+import { resetSignInState } from "../SignIn/SignIn.slice";
+import "./SignUp.scss";
+import { setSignUpState, signUpAsyncAction } from "./SignUp.slice";
 
 interface Props {
   error: string;
   loading: boolean;
-  signInSuccess: boolean;
+  signUpSuccess: boolean;
   dispatch: AppDispatch;
 }
 
-const SignIn = ({ error, loading, signInSuccess, dispatch }: Props) => {
+const SignUp = ({ error, loading, signUpSuccess, dispatch }: Props) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (signInSuccess) history.push("/");
-  }, [history, signInSuccess]);
+    if (signUpSuccess) history.push("/");
+  }, [history, signUpSuccess]);
 
   const handleSubmit = async (value: any) => {
-    dispatch(signInAsyncAction({ ...value }));
+    if (value.password !== value.confirmPassword) {
+      dispatch(setSignUpState({ error: "confirm password does not match" }));
+    } else dispatch(signUpAsyncAction({ ...value }));
   };
 
   return (
-    <div className="signInContainer">
-      <div className="signInCard">
+    <div className="signUpContainer">
+      <div className="signUpCard">
         <Row justify="center" align="middle">
-          <Typography.Title>Sign In</Typography.Title>
+          <Typography.Title>Sign Up</Typography.Title>
         </Row>
         <Form
           onFinish={handleSubmit}
@@ -51,13 +53,22 @@ const SignIn = ({ error, loading, signInSuccess, dispatch }: Props) => {
           >
             <Input.Password />
           </Form.Item>
+          <Form.Item
+            label="Confirm Password"
+            name="confirmPassword"
+            rules={[
+              { required: true, message: "Please input confirm password" },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
           {error ? (
             <Row>
               <Col span={16} offset={8}>
                 <Alert
                   style={{ marginBottom: "24px", color: "red" }}
                   type="error"
-                  message="Username or password is invalid"
+                  message={`Sign up fail: ${error}`}
                   showIcon
                 />
               </Col>
@@ -67,18 +78,18 @@ const SignIn = ({ error, loading, signInSuccess, dispatch }: Props) => {
           )}
           <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
             <Button type="primary" htmlType="submit" loading={loading}>
-              Sign In
+              Sign Up
             </Button>
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 24 }}>
             <Button
               type="text"
               onClick={() => {
-                dispatch(resetSignUpState());
-                history.push("/sign-up");
+                dispatch(resetSignInState());
+                history.push("/sign-in");
               }}
             >
-              Go to sign up
+              Go to sign in
             </Button>
           </Form.Item>
         </Form>
@@ -87,10 +98,10 @@ const SignIn = ({ error, loading, signInSuccess, dispatch }: Props) => {
   );
 };
 
-const mapState = ({ signIn }: RootState) => ({
-  error: signIn.error,
-  loading: signIn.loading,
-  signInSuccess: signIn.signInSuccess,
+const mapState = ({ signUp }: RootState) => ({
+  error: signUp.error,
+  loading: signUp.loading,
+  signUpSuccess: signUp.signUpSuccess,
 });
 
-export default connect(mapState)(SignIn);
+export default connect(mapState)(SignUp);

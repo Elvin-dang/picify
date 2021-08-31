@@ -25,6 +25,9 @@ const UserSlice = createSlice({
     setUserState: (state, action: PayloadAction<Partial<UserState>>) => {
       return { ...state, ...action.payload };
     },
+    resetUserState: () => {
+      return initialState;
+    },
   },
 });
 
