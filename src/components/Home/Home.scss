@@ -13,12 +13,15 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  align-items: flex-start;
   padding: 0.5rem;
 }
 
 .imageCard {
+  display: flex;
+  flex-direction: column;
   width: 23%;
-  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   border-radius: 30px;
   flex: 1 1 auto;
   text-align: center;
@@ -28,11 +31,23 @@
     border-radius: 30px 30px 0 0;
     width: 100%;
     overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  & > div {
+    width: 100%;
+    border-radius: 30px 30px 0 0;
+    overflow: hidden;
+
+    & .ant-skeleton-image {
+      width: 100%;
+    }
   }
 }
 
 .imageCardFooter {
   margin: 1rem auto;
+  margin-top: auto;
   display: flex;
   padding: 0 0.5rem;
   flex-wrap: wrap;
@@ -52,5 +67,11 @@
       background-color: rgb(199, 199, 199);
       color: white;
     }
+  }
+
+  & div {
+    flex: 1 1 auto;
+    margin: 0.5rem;
+    min-width: 30%;
   }
 }

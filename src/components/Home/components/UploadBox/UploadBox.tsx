@@ -1,36 +1,51 @@
 import { CloseCircleOutlined, CloudUploadOutlined } from "@ant-design/icons";
 import React, { ChangeEvent } from "react";
 import "./UploadBox.scss";
-import { useState } from "react";
 import { useRef } from "react";
 
 interface Props {
+  previewImage?: string;
+  imageName?: string;
   handleSetImage: Function;
+  handleSetCustomName: Function;
+  handleSetPreviewImage: Function;
+  handleSetImageName: Function;
 }
 
 //eslint-disable-next-line
 let regExp = /[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
 
-const UploadBox = ({ handleSetImage }: Props) => {
-  const [previewImage, setPreviewImage] = useState<string>();
-  const [imageName, setImageName] = useState<string>();
+const UploadBox = ({
+  previewImage,
+  imageName,
+  handleSetImage,
+  handleSetCustomName,
+  handleSetPreviewImage,
+  handleSetImageName,
+}: Props) => {
   const ref = useRef<HTMLInputElement>(null);
 
   const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       handleSetImage(e.target.files[0]);
-      setPreviewImage(URL.createObjectURL(e.target.files[0]));
+      handleSetPreviewImage(URL.createObjectURL(e.target.files[0]));
     }
     if (e.target.value) {
       const value = e.target.value.match(regExp);
-      if (value) setImageName(value[0]);
+      if (value) handleSetImageName(value[0]);
     }
   };
 
+  const handleChangeText = (e: ChangeEvent<HTMLInputElement>) => {
+    handleSetCustomName(e.target.value);
+  };
+
   const handleRemoveImage = () => {
-    setPreviewImage(undefined);
+    handleSetPreviewImage(undefined);
     handleSetImage(undefined);
-    setImageName(undefined);
+
+    handleSetImageName(undefined);
+    handleSetCustomName(undefined);
   };
 
   return (
@@ -43,7 +58,7 @@ const UploadBox = ({ handleSetImage }: Props) => {
           <div className="UBIcon">
             <CloudUploadOutlined />
           </div>
-          <div className="UBText">No file chosen, yet!</div>
+          <div className="UBText">No image chosen, yet!</div>
         </div>
         <div id="UBCancelButton" onClick={handleRemoveImage}>
           <CloseCircleOutlined />
@@ -57,8 +72,20 @@ const UploadBox = ({ handleSetImage }: Props) => {
         onChange={handleChangeImage}
         ref={ref}
       />
-      <button id="UBCustomButton" onClick={() => ref.current?.click()}>
-        Choose a file
+      {previewImage ? (
+        <input
+          type="text"
+          id="UBNameInput"
+          onChange={handleChangeText}
+          placeholder="Image custom name"
+        />
+      ) : null}
+      <button
+        id="UBCustomButton"
+        onClick={() => ref.current?.click()}
+        style={previewImage ? { marginTop: "10px" } : { marginTop: "20px" }}
+      >
+        Choose a image
       </button>
     </div>
   );

@@ -1,5 +1,5 @@
 .UBContainer {
-  width: 430px;
+  width: 100%;
 
   & .UBWrapper {
     position: relative;
@@ -77,10 +77,26 @@
     }
   }
 
-  & #UBCustomButton {
-    margin-top: 30px;
+  & #UBNameInput {
+    margin-top: 10px;
     width: 100%;
-    height: 50px;
+    height: 30px;
+    border-radius: 25px;
+    border: 2px dashed #c2cdda;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-align: center;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  & #UBCustomButton {
+    margin-top: 10px;
+    width: 100%;
+    height: 40px;
     display: block;
     border: none;
     border-radius: 25px;

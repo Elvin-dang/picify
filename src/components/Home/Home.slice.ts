@@ -1,56 +1,86 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addDoc, collection, getDocs } from "firebase/firestore";
-import { listAll, ref, uploadBytes } from "firebase/storage";
-import { fireStore, storage } from "../../config/firebase";
+import { message } from "antd";
+import {
+  getDownloadURL,
+  listAll,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { storage } from "../../config/firebase";
 
 interface HomeState {
   pictures: string[];
+  fetchingPicture: boolean;
+  uploadingPicture: "none" | "uploading" | "complete";
+  uploadProgress: number;
 }
 
 const initialState: HomeState = {
   pictures: [],
+  fetchingPicture: false,
+  uploadingPicture: "none",
+  uploadProgress: 0,
 };
 
 export const getPictureAsyncAction = createAsyncThunk(
   "Home/GetPicture",
-  async (params) => {
-    const querySnapshot = await getDocs(collection(fireStore, "pictures"));
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-    });
-    const imageRef = ref(storage, "images");
+  async (uid: string) => {
+    const imageRef = ref(storage, uid);
 
     // Find all the prefixes and items.
-    listAll(imageRef)
-      .then((res) => {
-        res.prefixes.forEach((folderRef, index) => {
-          console.log(`folder ${index}`, folderRef);
-        });
-        res.items.forEach((itemRef, index) => {
-          console.log(`item ${index}`, itemRef.fullPath);
-        });
-      })
-      .catch((error) => {
-        // Uh-oh, an error occurred!
-      });
-    return;
+    const images = await listAll(imageRef);
+
+    const urls = await Promise.all(
+      images.items.map(async (itemRef) => {
+        const url = await getDownloadURL(itemRef);
+        return url;
+      }),
+    );
+
+    return urls;
   },
 );
 
 export const addPictureAsyncAction = createAsyncThunk(
   "Home/AddPicture",
-  async (params: File | undefined) => {
-    await addDoc(collection(fireStore, "pictures"), {
-      name: "pic1",
-      url: "pic1.png",
-    });
-    if (params) {
-      const imageRef = ref(storage, "images/upload.jpg");
-      const value = await uploadBytes(imageRef, params);
-      console.log(value);
+  async (
+    {
+      uid,
+      image,
+      customName,
+    }: {
+      uid: string;
+      image?: File;
+      customName?: string;
+    },
+    thunkAPI,
+  ) => {
+    if (image) {
+      const imageRef = ref(
+        storage,
+        `${uid}/${customName ? customName : image.name}`,
+      );
+      const uploadTask = uploadBytesResumable(imageRef, image);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          thunkAPI.dispatch(
+            setHomeState({
+              uploadProgress: Math.floor(
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+              ),
+            }),
+          );
+        },
+        (error) => message.error("[ADD_PICTURE] " + error.message),
+        () => {
+          thunkAPI.dispatch(setHomeState({ uploadingPicture: "complete" }));
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            thunkAPI.dispatch(addPictureComplete(downloadURL));
+          });
+        },
+      );
     }
-    return;
   },
 );
 
@@ -64,19 +94,38 @@ const HomeSlice = createSlice({
     resetHomeState: () => {
       return initialState;
     },
+    addPictureComplete: (state, action: PayloadAction<string>) => {
+      state.pictures.unshift(action.payload);
+      state.uploadingPicture = "none";
+    },
   },
   extraReducers: {
-    [getPictureAsyncAction.pending.toString()]: (state) => {},
-    [getPictureAsyncAction.fulfilled.toString()]: (state) => {},
-    [getPictureAsyncAction.rejected.toString()]: (state, action) => {},
+    [getPictureAsyncAction.pending.toString()]: (state) => {
+      state.fetchingPicture = true;
+    },
+    [getPictureAsyncAction.fulfilled.toString()]: (
+      state,
+      action: PayloadAction<string[]>,
+    ) => {
+      state.pictures = action.payload;
+      state.fetchingPicture = false;
+    },
+    [getPictureAsyncAction.rejected.toString()]: (state, action) => {
+      message.error("[FETCH_PICTURE] " + action.error.message);
+      state.fetchingPicture = false;
+    },
 
-    [addPictureAsyncAction.pending.toString()]: (state) => {},
+    [addPictureAsyncAction.pending.toString()]: (state) => {
+      state.uploadingPicture = "uploading";
+      state.uploadProgress = 0;
+    },
     [addPictureAsyncAction.fulfilled.toString()]: (state) => {},
     [addPictureAsyncAction.rejected.toString()]: (state, action) => {
-      console.log(action.error);
+      message.error("[ADD_PICTURE] " + action.error.message);
     },
   },
 });
 
-export const { setHomeState, resetHomeState } = HomeSlice.actions;
+export const { setHomeState, resetHomeState, addPictureComplete } =
+  HomeSlice.actions;
 export default HomeSlice.reducer;
