@@ -18,6 +18,15 @@
   flex-wrap: wrap;
   margin-left: calc(-1 * var(--spacing));
 
+  & .imageCard.skeleton {
+    display: none;
+    width: calc(calc(100% / 1) - var(--spacing));
+
+    &:nth-child(1) {
+      display: flex;
+    }
+  }
+
   & .empty {
     width: 100%;
     display: flex;
@@ -30,18 +39,42 @@
 @include Responsive(XS) {
   .imageArea {
     --columns: 2;
+
+    & .imageCard.skeleton {
+      width: calc(calc(100% / 2) - var(--spacing));
+
+      &:nth-child(2) {
+        display: flex;
+      }
+    }
   }
 }
 
 @include Responsive(SM) {
   .imageArea {
     --columns: 3;
+
+    & .imageCard.skeleton {
+      width: calc(calc(100% / 3) - var(--spacing));
+
+      &:nth-child(3) {
+        display: flex;
+      }
+    }
   }
 }
 
 @include Responsive(MD) {
   .imageArea {
     --columns: 4;
+
+    & .imageCard.skeleton {
+      width: calc(calc(100% / 4) - var(--spacing));
+
+      &:nth-child(4) {
+        display: flex;
+      }
+    }
   }
 }
 
@@ -61,10 +94,6 @@
   margin-left: var(--spacing);
   margin-bottom: var(--spacing);
 
-  &.skeleton {
-    width: calc(calc(100% / 4) - var(--spacing));
-  }
-
   & img {
     border-radius: 30px 30px 0 0;
     height: 200px;
@@ -72,6 +101,7 @@
     overflow: hidden;
     object-fit: cover;
     margin-bottom: 1rem;
+    cursor: zoom-in;
   }
 
   & .imageCardFooter {
@@ -102,6 +132,10 @@
       flex: 1 1 auto;
       margin: 0.5rem;
       min-width: 30%;
+
+      & span {
+        width: 100%;
+      }
     }
   }
 

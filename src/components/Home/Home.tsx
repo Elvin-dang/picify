@@ -9,6 +9,7 @@ import { useState } from "react";
 import { connect } from "react-redux";
 import { AppDispatch, RootState } from "../../config/store";
 import AddPictureModal from "./components/AddPictureModal/AddPictureModal";
+import PictureDetailModal from "./components/PictureDetailModal/PictureDetailModal";
 import "./Home.scss";
 import { getPictureAsyncAction, PicturesType } from "./Home.slice";
 interface Props {
@@ -21,6 +22,9 @@ interface Props {
 const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
   const [openAddPictureModal, setOpenAddPictureModal] =
     useState<boolean>(false);
+  const [openPictureDetailModal, setOpenPictureDetailModal] =
+    useState<boolean>(false);
+  const [selectedIndex, setSelectedIndex] = useState<number>();
 
   useEffect(() => {
     dispatch(getPictureAsyncAction(uid));
@@ -42,6 +46,20 @@ const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleNextPicture = () => {
+    if (selectedIndex !== undefined) {
+      if (selectedIndex === pictures.length - 1) setSelectedIndex(0);
+      else setSelectedIndex(selectedIndex + 1);
+    }
+  };
+
+  const handlePreviousPicture = () => {
+    if (selectedIndex !== undefined) {
+      if (selectedIndex === 0) setSelectedIndex(pictures.length - 1);
+      else setSelectedIndex(selectedIndex - 1);
+    }
   };
 
   return (
@@ -93,7 +111,14 @@ const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
         ) : pictures.length > 0 ? (
           pictures.map((picture, index) => (
             <div className="imageCard" key={index}>
-              <img src={picture.url} alt="" />
+              <img
+                src={picture.url}
+                alt=""
+                onClick={() => {
+                  setSelectedIndex(index);
+                  setOpenPictureDetailModal(true);
+                }}
+              />
               <div className="imageCardFooter">
                 <button onClick={() => copyToClipboard(picture.url)}>
                   <LinkOutlined />
@@ -116,6 +141,15 @@ const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
       <AddPictureModal
         open={openAddPictureModal}
         handleCancel={() => setOpenAddPictureModal(false)}
+      />
+      <PictureDetailModal
+        open={openPictureDetailModal}
+        handleCancel={() => setOpenPictureDetailModal(false)}
+        picture={
+          selectedIndex !== undefined ? pictures[selectedIndex] : undefined
+        }
+        handleNextPicture={handleNextPicture}
+        handlePreviousPicture={handlePreviousPicture}
       />
     </div>
   );

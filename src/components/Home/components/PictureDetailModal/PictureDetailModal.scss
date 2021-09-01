@@ -1,0 +1,72 @@
+.PDContainer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.close {
+    display: none;
+  }
+
+  & .PDContent {
+    transform-style: preserve-3d;
+    width: 70vw;
+    margin: 0 10vw;
+    padding: 10vh 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & img {
+      max-height: 80vh;
+      width: 50%;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      transition: all 0.5s ease;
+    }
+  }
+
+  & .PDPrevious {
+    padding-left: 1rem;
+
+    & span svg {
+      color: rgb(88, 88, 88);
+      height: 3rem;
+      width: 3rem;
+      transition: 0.2s ease-out;
+
+      &:hover {
+        color: white;
+        height: 4rem;
+        width: 4rem;
+      }
+    }
+  }
+
+  & .PDNext {
+    padding-right: 1rem;
+
+    & span svg {
+      color: rgb(88, 88, 88);
+      height: 3rem;
+      width: 3rem;
+      transition: 0.2s ease-out;
+
+      &:hover {
+        color: white;
+        height: 4rem;
+        width: 4rem;
+      }
+    }
+  }
+}
+
+body {
+  perspective: 1000px;
+}

@@ -17,6 +17,8 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
+import logo from "../../assets/image/main_logo.png";
+
 interface Props {
   photoURL: string | null;
   displayName: string | null;
@@ -114,22 +116,31 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
     <div className="layoutContainer">
       <div className="headerWrapper">
         <PageHeader
-          title="Picify"
+          title={
+            <div className="header">
+              <img className="headerLogo" src={logo} alt=""></img>
+              <Typography.Title level={1} id="logoText">
+                icify
+              </Typography.Title>
+            </div>
+          }
           extra={[
-            <Dropdown
-              overlay={menu}
-              placement="bottomCenter"
-              arrow
-              key="1"
-              trigger={["click"]}
-            >
-              <Avatar
-                size="large"
-                src={photoURL}
-                icon={<UserOutlined />}
-                style={{ cursor: "pointer" }}
-              />
-            </Dropdown>,
+            <div className="extraHeader">
+              <Dropdown
+                overlay={menu}
+                placement="bottomCenter"
+                arrow
+                key="1"
+                trigger={["click"]}
+              >
+                <Avatar
+                  size="large"
+                  src={photoURL}
+                  icon={<UserOutlined />}
+                  style={{ cursor: "pointer" }}
+                />
+              </Dropdown>
+            </div>,
           ]}
         />
       </div>

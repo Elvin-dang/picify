@@ -18,3 +18,27 @@
   border-radius: 30px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .headerLogo {
+    width: 4rem;
+  }
+
+  & #logoText {
+    display: inline-block;
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+}
+
+.extraHeader {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
