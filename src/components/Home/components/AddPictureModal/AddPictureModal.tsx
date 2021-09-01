@@ -46,7 +46,6 @@ const AddPictureModal = ({
   const handleSetImageName = (value: string) => setImageName(value);
 
   const handleUpload = () => {
-    console.log(image);
     if (image && (image.type === "image/jpeg" || image.type === "image/png")) {
       if (image.size <= 10 * Math.pow(1024, 2)) {
         dispatch(addPictureAsyncAction({ uid, image, customName }));

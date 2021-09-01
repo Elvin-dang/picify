@@ -16,6 +16,7 @@ import {
   ProfileOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { useState } from "react";
 interface Props {
   photoURL: string | null;
   displayName: string | null;
@@ -25,6 +26,7 @@ interface Props {
 
 const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
   const history = useHistory();
+  const [shouldRender, setShouldRender] = useState<boolean>(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -40,12 +42,15 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
             uid: user.uid,
           }),
         );
+        setShouldRender(true);
       } else {
+        setShouldRender(false);
         history.push("/sign-in");
         dispatch(resetSignInState());
       }
     });
     return () => {
+      setShouldRender(false);
       unsubscribe();
     };
   }, [history, dispatch]);
@@ -105,7 +110,7 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
     </Menu>
   );
 
-  return (
+  return shouldRender ? (
     <div className="layoutContainer">
       <div className="headerWrapper">
         <PageHeader
@@ -141,6 +146,8 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
         </Switch>
       </div>
     </div>
+  ) : (
+    <></>
   );
 };
 

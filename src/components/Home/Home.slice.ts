@@ -2,14 +2,24 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { message } from "antd";
 import {
   getDownloadURL,
+  getMetadata,
   listAll,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
 import { storage } from "../../config/firebase";
 
+export interface PicturesType {
+  name: string;
+  url: string;
+  updateAt: string;
+  createAt: string;
+  size: number;
+  contentType: string | undefined;
+}
+
 interface HomeState {
-  pictures: string[];
+  pictures: PicturesType[];
   fetchingPicture: boolean;
   uploadingPicture: "none" | "uploading" | "complete";
   uploadProgress: number;
@@ -32,8 +42,16 @@ export const getPictureAsyncAction = createAsyncThunk(
 
     const urls = await Promise.all(
       images.items.map(async (itemRef) => {
+        const metaData = await getMetadata(itemRef);
         const url = await getDownloadURL(itemRef);
-        return url;
+        return {
+          name: metaData.name,
+          url: url,
+          updateAt: metaData.updated,
+          createAt: metaData.timeCreated,
+          size: metaData.size,
+          contentType: metaData.contentType,
+        };
       }),
     );
 
@@ -73,11 +91,21 @@ export const addPictureAsyncAction = createAsyncThunk(
           );
         },
         (error) => message.error("[ADD_PICTURE] " + error.message),
-        () => {
+        async () => {
+          const url = await getDownloadURL(uploadTask.snapshot.ref);
+          const metaData = await getMetadata(uploadTask.snapshot.ref);
+
           thunkAPI.dispatch(setHomeState({ uploadingPicture: "complete" }));
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            thunkAPI.dispatch(addPictureComplete(downloadURL));
-          });
+          thunkAPI.dispatch(
+            addPictureComplete({
+              name: metaData.name,
+              url: url,
+              updateAt: metaData.updated,
+              createAt: metaData.timeCreated,
+              size: metaData.size,
+              contentType: metaData.contentType,
+            }),
+          );
         },
       );
     }
@@ -94,7 +122,7 @@ const HomeSlice = createSlice({
     resetHomeState: () => {
       return initialState;
     },
-    addPictureComplete: (state, action: PayloadAction<string>) => {
+    addPictureComplete: (state, action: PayloadAction<PicturesType>) => {
       state.pictures.unshift(action.payload);
       state.uploadingPicture = "none";
     },
@@ -105,7 +133,7 @@ const HomeSlice = createSlice({
     },
     [getPictureAsyncAction.fulfilled.toString()]: (
       state,
-      action: PayloadAction<string[]>,
+      action: PayloadAction<PicturesType[]>,
     ) => {
       state.pictures = action.payload;
       state.fetchingPicture = false;
