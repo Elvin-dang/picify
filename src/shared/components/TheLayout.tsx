@@ -125,12 +125,11 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
             </div>
           }
           extra={[
-            <div className="extraHeader">
+            <div className="extraHeader" key="1">
               <Dropdown
                 overlay={menu}
                 placement="bottomCenter"
                 arrow
-                key="1"
                 trigger={["click"]}
               >
                 <Avatar
