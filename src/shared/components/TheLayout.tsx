@@ -75,11 +75,11 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
         <></>
       )}
       <Menu.Item key={1}>
-        <Row gutter={24} align="middle">
-          <ProfileOutlined
-            style={{ marginLeft: "10px", verticalAlign: "baseline" }}
-          />
-          <Link to="/profile">
+        <Link to="/profile">
+          <Row gutter={24} align="middle">
+            <ProfileOutlined
+              style={{ marginLeft: "10px", verticalAlign: "baseline" }}
+            />
             <Button
               style={{
                 backgroundColor: "transparent",
@@ -89,11 +89,11 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
             >
               Profile
             </Button>
-          </Link>
-        </Row>
+          </Row>
+        </Link>
       </Menu.Item>
       <Menu.Item key={2}>
-        <Row gutter={24} align="middle">
+        <Row gutter={24} align="middle" onClick={handleLogout}>
           <LogoutOutlined
             style={{ marginLeft: "10px", verticalAlign: "baseline" }}
           />
@@ -103,7 +103,6 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
               borderColor: "transparent",
               boxShadow: "none",
             }}
-            onClick={handleLogout}
           >
             Log out
           </Button>

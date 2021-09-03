@@ -8,12 +8,14 @@
 .headerWrapper {
   width: 80%;
   margin: 1rem auto;
-  border: 0.1rem solid transparent;
   border-radius: 30px;
-  box-shadow: rgba(100, 100, 111, 0.8) 0px 7px 29px 0px;
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.3)
+  );
 
   & .ant-page-header-ghost {
-    background-color: white;
     border-radius: 30px;
   }
 }
@@ -21,10 +23,13 @@
 .contentWrapper {
   width: 80%;
   margin: 0 auto;
-  border: 0.1rem solid transparent;
   border-radius: 30px;
   box-shadow: rgba(100, 100, 111, 0.8) 0px 7px 29px 0px;
-  background-color: white;
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.3)
+  );
 }
 
 .header {
