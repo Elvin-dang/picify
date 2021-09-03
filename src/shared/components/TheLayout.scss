@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
 .layoutContainer {
   display: flex;
   flex-direction: column;
@@ -8,7 +10,12 @@
   margin: 1rem auto;
   border: 0.1rem solid transparent;
   border-radius: 30px;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  box-shadow: rgba(100, 100, 111, 0.8) 0px 7px 29px 0px;
+
+  & .ant-page-header-ghost {
+    background-color: white;
+    border-radius: 30px;
+  }
 }
 
 .contentWrapper {
@@ -16,13 +23,21 @@
   margin: 0 auto;
   border: 0.1rem solid transparent;
   border-radius: 30px;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  box-shadow: rgba(100, 100, 111, 0.8) 0px 7px 29px 0px;
+  background-color: white;
 }
 
 .header {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: whitesmoke;
+  }
 
   .headerLogo {
     width: 4rem;
@@ -31,7 +46,8 @@
   & #logoText {
     display: inline-block;
     margin-bottom: 0;
-    line-height: 1.5;
+    line-height: 1.8;
+    font-family: "Pacifico", cursive;
   }
 }
 

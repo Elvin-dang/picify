@@ -62,8 +62,11 @@ img {
   &__img {
     justify-self: center;
     & img {
-      width: 310px;
+      width: 35rem;
       margin-top: 2.4rem;
+    }
+    &-hidden {
+      display: none;
     }
   }
   &__forms {
@@ -94,6 +97,11 @@ img {
         transform: scale(1, 1);
       }
     }
+  }
+  &__logo {
+    height: 5rem;
+    margin: 0 auto;
+    margin-bottom: 1rem;
   }
   &__title {
     font-size: var(--h1-font-size);
@@ -262,21 +270,53 @@ img {
     }
     &__img {
       display: flex;
-      width: 600px;
-      height: 588px;
+      width: 800px;
+      height: 800px;
       background-color: var(--first-color-lighten);
       border-radius: 1.6rem;
       padding-left: 1.6rem;
+      box-shadow: 0 8px 20px rgba(35, 0, 77, 0.2);
+      transition: 1s ease-out;
+
+      &:hover {
+        transform: translateX(-7rem) rotateY(20deg);
+
+        & ~ .login__forms .login__create,
+        ~ .login__forms .login__registre {
+          transform: translateX(7rem);
+        }
+      }
 
       & img {
-        width: 390px;
+        width: 60rem;
         margin-top: 0;
+      }
+
+      &-hidden {
+        display: block;
+        position: relative;
+        width: 100%;
+
+        &-text {
+          display: inline;
+          position: absolute;
+          top: 40%;
+          right: 10px;
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+
+          & a {
+            font-weight: bolder;
+            text-decoration: underline;
+          }
+        }
       }
     }
 
     &__registre,
     &__create {
       left: -17.6rem;
+      transition: 1s;
     }
     &__registre {
       bottom: -3.2rem;

@@ -1,5 +1,11 @@
 .container {
   min-height: 100vh;
+  background: linear-gradient(
+    90deg,
+    rgba(58, 172, 180, 1) 19%,
+    rgba(124, 29, 253, 1) 72%,
+    rgba(252, 69, 209, 1) 100%
+  );
 }
 
 .ant-modal-content {
