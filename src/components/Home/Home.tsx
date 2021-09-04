@@ -1,7 +1,9 @@
 import {
+  DeleteFilled,
   DownloadOutlined,
   LinkOutlined,
   PlusOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { Button, Empty, message, Skeleton } from "antd";
 import { useEffect } from "react";
@@ -111,14 +113,23 @@ const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
         ) : pictures.length > 0 ? (
           pictures.map((picture, index) => (
             <div className="imageCard" key={index}>
-              <img
-                src={picture.url}
-                alt=""
-                onClick={() => {
-                  setSelectedIndex(index);
-                  setOpenPictureDetailModal(true);
-                }}
-              />
+              <img src={picture.url} alt="" />
+              <div className="shotThumbnail">
+                <div className="magnifying">
+                  <SearchOutlined
+                    onClick={() => {
+                      setSelectedIndex(index);
+                      setOpenPictureDetailModal(true);
+                    }}
+                  />
+                </div>
+                <div className="shotThumbnailContent">
+                  <div className="shotTitle">{picture.name}</div>
+                  <button className="action">
+                    <DeleteFilled />
+                  </button>
+                </div>
+              </div>
               <div className="imageCardFooter">
                 <button onClick={() => copyToClipboard(picture.url)}>
                   <LinkOutlined />

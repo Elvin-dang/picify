@@ -23,6 +23,7 @@ interface HomeState {
   fetchingPicture: boolean;
   uploadingPicture: "none" | "uploading" | "complete";
   uploadProgress: number;
+  deletingPicture: "none" | "deleting" | "complete";
 }
 
 const initialState: HomeState = {
@@ -30,6 +31,7 @@ const initialState: HomeState = {
   fetchingPicture: false,
   uploadingPicture: "none",
   uploadProgress: 0,
+  deletingPicture: "none",
 };
 
 export const getPictureAsyncAction = createAsyncThunk(
@@ -44,6 +46,7 @@ export const getPictureAsyncAction = createAsyncThunk(
       images.items.map(async (itemRef) => {
         const metaData = await getMetadata(itemRef);
         const url = await getDownloadURL(itemRef);
+        console.log(new Date(metaData.updated));
         return {
           name: metaData.name,
           url: url,
@@ -55,7 +58,9 @@ export const getPictureAsyncAction = createAsyncThunk(
       }),
     );
 
-    return urls;
+    return urls.sort(
+      (a, b) => new Date(b.updateAt).getTime() - new Date(a.updateAt).getTime(),
+    );
   },
 );
 
