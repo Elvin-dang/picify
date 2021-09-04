@@ -2,22 +2,22 @@ import React from "react";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link, Route, Switch, useHistory } from "react-router-dom";
-import { auth } from "../../config/firebase";
+import { auth } from "../../../config/firebase";
 import { connect } from "react-redux";
-import { setUserState } from "../slices/user.slice";
-import routes from "../../config/routes";
+import { setUserState } from "../../slices/user.slice";
+import routes from "../../../config/routes";
 import { Button, Dropdown, Menu, PageHeader, Row, Typography } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import "./TheLayout.scss";
-import { AppDispatch, RootState } from "../../config/store";
-import { resetSignInState } from "../../components/SignIn/SignIn.slice";
+import { AppDispatch, RootState } from "../../../config/store";
+import { resetSignInState } from "../../../components/SignIn/SignIn.slice";
 import {
   LogoutOutlined,
   ProfileOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
-import logo from "../../assets/image/main_logo.png";
+import logo from "../../../assets/image/main_logo.png";
 
 interface Props {
   photoURL: string | null;

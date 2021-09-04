@@ -112,7 +112,7 @@ const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
           </>
         ) : pictures.length > 0 ? (
           pictures.map((picture, index) => (
-            <div className="imageCard" key={index}>
+            <div className="imageCard" key={picture.name}>
               <img src={picture.url} alt="" />
               <div className="shotThumbnail">
                 <div className="magnifying">

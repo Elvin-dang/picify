@@ -46,7 +46,6 @@ export const getPictureAsyncAction = createAsyncThunk(
       images.items.map(async (itemRef) => {
         const metaData = await getMetadata(itemRef);
         const url = await getDownloadURL(itemRef);
-        console.log(new Date(metaData.updated));
         return {
           name: metaData.name,
           url: url,

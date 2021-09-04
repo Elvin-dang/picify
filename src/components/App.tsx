@@ -2,7 +2,7 @@ import { FC } from "react";
 import "./App.scss";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import theLayout from "../shared/components/TheLayout";
+import theLayout from "../shared/components/TheLayout/TheLayout";
 import SignInAndSignUp from "./SignInAndSignUp/SignInAndSignUp";
 
 const App: FC = () => {

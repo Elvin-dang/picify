@@ -114,9 +114,10 @@
     bottom: 0;
     display: flex;
     flex-direction: column;
-    padding: 2rem;
+    padding: 0.5rem 2rem;
     opacity: 0;
     transition: opacity 0.5s ease;
+    backface-visibility: hidden;
 
     & .magnifying {
       flex: 3;
@@ -127,11 +128,12 @@
       & span {
         cursor: pointer;
         font-size: 5rem;
-        color: whitesmoke;
         transition: 0.5s ease;
+        color: rgba($color: #fff, $alpha: 0.5);
 
         &:hover {
-          transform: scale(1.2, 1.2) rotate(45deg);
+          transform: scale(1.3, 1.3) rotate(360deg);
+          color: whitesmoke;
         }
       }
     }
@@ -162,7 +164,7 @@
 
         &:hover {
           transform: scale(1.2, 1.2);
-          background: red;
+          background-color: red;
 
           & span svg {
             color: white;
