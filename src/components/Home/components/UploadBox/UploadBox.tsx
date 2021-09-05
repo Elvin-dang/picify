@@ -83,7 +83,7 @@ const UploadBox = ({
       <button
         id="UBCustomButton"
         onClick={() => ref.current?.click()}
-        style={previewImage ? { marginTop: "10px" } : { marginTop: "20px" }}
+        // style={previewImage ? { marginTop: "20px" } : { marginTop: "20px" }}
       >
         Choose a image
       </button>

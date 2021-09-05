@@ -33,6 +33,18 @@
     justify-content: center;
     align-items: center;
     height: 30vh;
+
+    & .ant-empty .ant-empty-image img {
+      margin: 0 auto;
+    }
+
+    & .emptyDescription {
+      color: white;
+      font-family: "Open Sans Condensed", sans-serif;
+      font-weight: 800;
+      line-height: 3rem;
+      font-size: 3rem;
+    }
   }
 }
 
@@ -146,15 +158,34 @@
       z-index: 1;
 
       & .shotTitle {
-        color: white;
-        font-size: 1.6rem;
-        font-weight: 700;
-        font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
-          sans-serif;
-        line-height: 2.2rem;
         overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        padding-right: 1rem;
+
+        & .shotName {
+          color: white;
+          font-size: 1.6rem;
+          font-weight: 700;
+          font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica,
+            Arial, sans-serif;
+          line-height: 2.2rem;
+          overflow: inherit;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          text-align: start;
+        }
+
+        & .shotTime {
+          color: white;
+          font-size: 1.2rem;
+          font-weight: 500;
+          font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica,
+            Arial, sans-serif;
+          line-height: 2rem;
+          overflow: inherit;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          text-align: start;
+        }
       }
 
       & .action {

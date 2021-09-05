@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { AppDispatch, RootState } from "../../config/store";
+import { toTimeString } from "../../utils/time";
 import AddPictureModal from "./components/AddPictureModal/AddPictureModal";
 import PictureDetailModal from "./components/PictureDetailModal/PictureDetailModal";
 import "./Home.scss";
@@ -124,7 +125,12 @@ const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
                   />
                 </div>
                 <div className="shotThumbnailContent">
-                  <div className="shotTitle">{picture.name}</div>
+                  <div className="shotTitle">
+                    <div className="shotName">{picture.name}</div>
+                    <div className="shotTime">
+                      {toTimeString(picture.createAt)}
+                    </div>
+                  </div>
                   <button className="action">
                     <DeleteFilled />
                   </button>
@@ -144,7 +150,9 @@ const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
           <div className="empty">
             <Empty
               image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-              description="No image in gallery"
+              description={
+                <div className="emptyDescription">No image in gallery</div>
+              }
             />
           </div>
         )}
