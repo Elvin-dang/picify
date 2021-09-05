@@ -1,7 +1,9 @@
 import {
   DeleteFilled,
+  DeleteOutlined,
   DownloadOutlined,
   LinkOutlined,
+  LoadingOutlined,
   PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
@@ -10,28 +12,46 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { AppDispatch, RootState } from "../../config/store";
+import ConfirmModal from "../../shared/components/ConfirmModal/ConfirmModal";
 import { toTimeString } from "../../utils/time";
 import AddPictureModal from "./components/AddPictureModal/AddPictureModal";
 import PictureDetailModal from "./components/PictureDetailModal/PictureDetailModal";
 import "./Home.scss";
-import { getPictureAsyncAction, PicturesType } from "./Home.slice";
+import {
+  deletePictureAsyncAction,
+  getPictureAsyncAction,
+  PicturesType,
+} from "./Home.slice";
 interface Props {
   uid: string;
   pictures: PicturesType[];
   fetchingPicture: boolean;
+  deletingPicture: "none" | "deleting" | "complete";
   dispatch: AppDispatch;
 }
 
-const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
+const Home = ({
+  uid,
+  pictures,
+  fetchingPicture,
+  deletingPicture,
+  dispatch,
+}: Props) => {
   const [openAddPictureModal, setOpenAddPictureModal] =
     useState<boolean>(false);
   const [openPictureDetailModal, setOpenPictureDetailModal] =
+    useState<boolean>(false);
+  const [openDeleteConfirmModal, setOpenDeleteConfirmModal] =
     useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState<number>();
 
   useEffect(() => {
     dispatch(getPictureAsyncAction(uid));
   }, [dispatch, uid]);
+
+  useEffect(() => {
+    if (deletingPicture === "complete") setOpenDeleteConfirmModal(false);
+  }, [deletingPicture]);
 
   const copyToClipboard = (value: string) => {
     navigator.clipboard.writeText(value);
@@ -131,7 +151,13 @@ const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
                       {toTimeString(picture.createAt)}
                     </div>
                   </div>
-                  <button className="action">
+                  <button
+                    className="action"
+                    onClick={() => {
+                      setSelectedIndex(index);
+                      setOpenDeleteConfirmModal(true);
+                    }}
+                  >
                     <DeleteFilled />
                   </button>
                 </div>
@@ -170,6 +196,38 @@ const Home = ({ uid, pictures, fetchingPicture, dispatch }: Props) => {
         handleNextPicture={handleNextPicture}
         handlePreviousPicture={handlePreviousPicture}
       />
+      <ConfirmModal
+        open={openDeleteConfirmModal}
+        onCancel={() => setOpenDeleteConfirmModal(false)}
+        content={`Are you sure to delete "${
+          selectedIndex !== undefined ? pictures[selectedIndex].name : undefined
+        }" ?`}
+        moreInfo={"Delete perpetually and can not be reverted"}
+        theme="red"
+        icon={<DeleteOutlined />}
+        confirmButton={
+          <button
+            onClick={() =>
+              dispatch(
+                deletePictureAsyncAction({
+                  uid,
+                  imageName:
+                    selectedIndex !== undefined
+                      ? pictures[selectedIndex].name
+                      : undefined,
+                }),
+              )
+            }
+          >
+            {deletingPicture === "deleting" ? (
+              <LoadingOutlined />
+            ) : (
+              <DeleteOutlined />
+            )}{" "}
+            Delete
+          </button>
+        }
+      />
     </div>
   );
 };
@@ -178,6 +236,7 @@ const mapState = ({ home, user }: RootState) => ({
   uid: user.uid,
   pictures: home.pictures,
   fetchingPicture: home.fetchingPicture,
+  deletingPicture: home.deletingPicture,
 });
 
 export default connect(mapState)(Home);

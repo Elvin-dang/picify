@@ -6,6 +6,7 @@ import {
   listAll,
   ref,
   uploadBytesResumable,
+  deleteObject,
 } from "firebase/storage";
 import { storage } from "../../config/firebase";
 
@@ -94,7 +95,11 @@ export const addPictureAsyncAction = createAsyncThunk(
             }),
           );
         },
-        (error) => message.error("[ADD_PICTURE] " + error.message),
+        (error) => {
+          message.error("[ADD_PICTURE] " + error.message);
+          thunkAPI.dispatch(setHomeState({ uploadingPicture: "complete" }));
+          thunkAPI.dispatch(setHomeState({ uploadingPicture: "none" }));
+        },
         async () => {
           const url = await getDownloadURL(uploadTask.snapshot.ref);
           const metaData = await getMetadata(uploadTask.snapshot.ref);
@@ -116,6 +121,24 @@ export const addPictureAsyncAction = createAsyncThunk(
   },
 );
 
+export const deletePictureAsyncAction = createAsyncThunk(
+  "Home/Delete",
+  async ({
+    uid,
+    imageName,
+  }: {
+    uid: string;
+    imageName: string | undefined;
+  }) => {
+    if (imageName !== undefined) {
+      const imageRef = ref(storage, `${uid}/${imageName}`);
+      await deleteObject(imageRef);
+    }
+
+    return imageName;
+  },
+);
+
 const HomeSlice = createSlice({
   name: "Home",
   initialState,
@@ -127,11 +150,17 @@ const HomeSlice = createSlice({
       return initialState;
     },
     addPictureComplete: (state, action: PayloadAction<PicturesType>) => {
+      const duplicatePictureIndex = state.pictures.findIndex(
+        (picture) => picture.name === action.payload.name,
+      );
+      if (duplicatePictureIndex > -1)
+        state.pictures.splice(duplicatePictureIndex, 1);
       state.pictures.unshift(action.payload);
       state.uploadingPicture = "none";
     },
   },
   extraReducers: {
+    // get
     [getPictureAsyncAction.pending.toString()]: (state) => {
       state.fetchingPicture = true;
     },
@@ -147,6 +176,7 @@ const HomeSlice = createSlice({
       state.fetchingPicture = false;
     },
 
+    // add
     [addPictureAsyncAction.pending.toString()]: (state) => {
       state.uploadingPicture = "uploading";
       state.uploadProgress = 0;
@@ -154,6 +184,29 @@ const HomeSlice = createSlice({
     [addPictureAsyncAction.fulfilled.toString()]: (state) => {},
     [addPictureAsyncAction.rejected.toString()]: (state, action) => {
       message.error("[ADD_PICTURE] " + action.error.message);
+      state.uploadingPicture = "complete";
+    },
+
+    //delete
+    [deletePictureAsyncAction.pending.toString()]: (state) => {
+      state.deletingPicture = "deleting";
+    },
+    [deletePictureAsyncAction.fulfilled.toString()]: (
+      state,
+      action: PayloadAction<string | undefined>,
+    ) => {
+      if (action.payload !== undefined) {
+        const deletePictureIndex = state.pictures.findIndex(
+          (picture) => picture.name === action.payload,
+        );
+        if (deletePictureIndex > -1)
+          state.pictures.splice(deletePictureIndex, 1);
+      }
+      state.deletingPicture = "complete";
+    },
+    [deletePictureAsyncAction.rejected.toString()]: (state, action) => {
+      message.error("[DELETE_PICTURE] " + action.error.message);
+      state.deletingPicture = "complete";
     },
   },
 });

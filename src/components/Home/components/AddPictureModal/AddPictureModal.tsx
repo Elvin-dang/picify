@@ -1,10 +1,15 @@
-import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  UploadOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 import { message, Progress } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { AppDispatch, RootState } from "../../../../config/store";
-import { addPictureAsyncAction } from "../../Home.slice";
+import ConfirmModal from "../../../../shared/components/ConfirmModal/ConfirmModal";
+import { addPictureAsyncAction, PicturesType } from "../../Home.slice";
 import UploadBox from "../UploadBox/UploadBox";
 import "./AddPictureModal.scss";
 
@@ -13,6 +18,7 @@ interface Props {
   open: boolean;
   uploadingPicture: string;
   uploadProgress: number;
+  pictures: PicturesType[];
   handleCancel: () => void;
   dispatch: AppDispatch;
 }
@@ -22,6 +28,7 @@ const AddPictureModal = ({
   open,
   uploadingPicture,
   uploadProgress,
+  pictures,
   handleCancel,
   dispatch,
 }: Props) => {
@@ -29,11 +36,14 @@ const AddPictureModal = ({
   const [customName, setCustomName] = useState<string>();
   const [previewImage, setPreviewImage] = useState<string>();
   const [imageName, setImageName] = useState<string>();
+  const [openWaringModal, setOpenWarningModel] = useState<boolean>(false);
+  const [isDuplicateName, setIsDuplicateName] = useState<boolean>(false);
 
   useEffect(() => {
     if (uploadingPicture === "complete") {
       setImage(undefined);
       setCustomName(undefined);
+      setIsDuplicateName(false);
       setPreviewImage(undefined);
       setImageName(undefined);
       handleCancel();
@@ -41,14 +51,31 @@ const AddPictureModal = ({
   }, [uploadingPicture, handleCancel]);
 
   const handleSetImage = (image: File) => setImage(image);
-  const handleSetCustomName = (value: string) => setCustomName(value);
+  const handleSetCustomName = (value: string) => {
+    setCustomName(value);
+    if (pictures.findIndex((picture) => picture.name === value) > -1) {
+      setIsDuplicateName(true);
+    } else {
+      setIsDuplicateName(false);
+    }
+  };
   const handleSetPreviewImage = (value: string) => setPreviewImage(value);
   const handleSetImageName = (value: string) => setImageName(value);
 
   const handleUpload = () => {
     if (image && (image.type === "image/jpeg" || image.type === "image/png")) {
       if (image.size <= 10 * Math.pow(1024, 2)) {
-        dispatch(addPictureAsyncAction({ uid, image, customName }));
+        if (
+          pictures.findIndex((picture) =>
+            customName
+              ? picture.name === customName
+              : picture.name === image.name,
+          ) > -1
+        ) {
+          setOpenWarningModel(true);
+        } else {
+          dispatch(addPictureAsyncAction({ uid, image, customName }));
+        }
       } else {
         message.error("Image size must be smaller than 10MB");
       }
@@ -57,6 +84,11 @@ const AddPictureModal = ({
       setImage(undefined);
       setPreviewImage(undefined);
     }
+  };
+
+  const forceUpload = () => {
+    dispatch(addPictureAsyncAction({ uid, image, customName }));
+    setOpenWarningModel(false);
   };
 
   return (
@@ -72,6 +104,7 @@ const AddPictureModal = ({
           <UploadBox
             previewImage={previewImage}
             imageName={imageName}
+            isDuplicateName={isDuplicateName}
             handleSetImage={handleSetImage}
             handleSetCustomName={handleSetCustomName}
             handleSetPreviewImage={handleSetPreviewImage}
@@ -99,6 +132,16 @@ const AddPictureModal = ({
             </>
           )}
         </div>
+        <ConfirmModal
+          open={openWaringModal}
+          onCancel={() => setOpenWarningModel(false)}
+          content={"Image has been duplicate name. Are you sure to continue ?"}
+          moreInfo={
+            "Keep uploading will overwrite the picture which has the same name"
+          }
+          confirmButton={<button onClick={forceUpload}>Accept</button>}
+          icon={<WarningOutlined />}
+        />
       </div>
     </Modal>
   );
@@ -108,6 +151,7 @@ const mapState = ({ user, home }: RootState) => ({
   uid: user.uid,
   uploadingPicture: home.uploadingPicture,
   uploadProgress: home.uploadProgress,
+  pictures: home.pictures,
 });
 
 export default connect(mapState)(AddPictureModal);

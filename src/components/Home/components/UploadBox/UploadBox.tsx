@@ -1,11 +1,17 @@
-import { CloseCircleOutlined, CloudUploadOutlined } from "@ant-design/icons";
+import {
+  CloseCircleOutlined,
+  CloudUploadOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
 import React, { ChangeEvent } from "react";
 import "./UploadBox.scss";
 import { useRef } from "react";
+import { Tooltip } from "antd";
 
 interface Props {
   previewImage?: string;
   imageName?: string;
+  isDuplicateName: boolean;
   handleSetImage: Function;
   handleSetCustomName: Function;
   handleSetPreviewImage: Function;
@@ -18,6 +24,7 @@ let regExp = /[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
 const UploadBox = ({
   previewImage,
   imageName,
+  isDuplicateName,
   handleSetImage,
   handleSetCustomName,
   handleSetPreviewImage,
@@ -73,12 +80,19 @@ const UploadBox = ({
         ref={ref}
       />
       {previewImage ? (
-        <input
-          type="text"
-          id="UBNameInput"
-          onChange={handleChangeText}
-          placeholder="Image custom name"
-        />
+        <div
+          className={isDuplicateName ? "InputContainer show" : "InputContainer"}
+        >
+          <input
+            type="text"
+            id="UBNameInput"
+            onChange={handleChangeText}
+            placeholder="Image custom name"
+          />
+          <Tooltip color="red" title="Duplicate name">
+            <InfoCircleOutlined />
+          </Tooltip>
+        </div>
       ) : null}
       <button
         id="UBCustomButton"
