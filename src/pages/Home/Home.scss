@@ -52,11 +52,14 @@
   .imageArea {
     --columns: 2;
 
-    & .imageCard.skeleton {
-      width: calc(calc(100% / 2) - var(--spacing));
+    & .imageCard {
+      --scale: 1.125;
+      .skeleton {
+        width: calc(calc(100% / 2) - var(--spacing));
 
-      &:nth-child(2) {
-        display: flex;
+        &:nth-child(2) {
+          display: flex;
+        }
       }
     }
   }
@@ -66,11 +69,14 @@
   .imageArea {
     --columns: 3;
 
-    & .imageCard.skeleton {
-      width: calc(calc(100% / 3) - var(--spacing));
+    & .imageCard {
+      --scale: 1.15;
+      .skeleton {
+        width: calc(calc(100% / 3) - var(--spacing));
 
-      &:nth-child(3) {
-        display: flex;
+        &:nth-child(3) {
+          display: flex;
+        }
       }
     }
   }
@@ -80,11 +86,15 @@
   .imageArea {
     --columns: 4;
 
-    & .imageCard.skeleton {
-      width: calc(calc(100% / 4) - var(--spacing));
+    & .imageCard {
+      --scale: 1.175;
 
-      &:nth-child(4) {
-        display: flex;
+      .skeleton {
+        width: calc(calc(100% / 4) - var(--spacing));
+
+        &:nth-child(4) {
+          display: flex;
+        }
       }
     }
   }
@@ -93,6 +103,10 @@
 @include Responsive(XXL) {
   .imageArea {
     --columns: 5;
+
+    & .imageCard {
+      --scale: 1.2;
+    }
   }
 }
 
@@ -108,8 +122,10 @@
   transition: 0.3s;
   position: relative;
 
+  --scale: 1.1;
+
   &:hover {
-    transform: scale(1.3, 1.3);
+    transform: scale(var(--scale), var(--scale));
     z-index: 2;
 
     & .shotThumbnail {
