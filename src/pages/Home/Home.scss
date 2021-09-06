@@ -48,7 +48,7 @@
   }
 }
 
-@include Responsive(XS) {
+@include Responsive(SM) {
   .imageArea {
     --columns: 2;
 
@@ -62,7 +62,7 @@
   }
 }
 
-@include Responsive(SM) {
+@include Responsive(MD) {
   .imageArea {
     --columns: 3;
 
@@ -76,7 +76,7 @@
   }
 }
 
-@include Responsive(MD) {
+@include Responsive(XL) {
   .imageArea {
     --columns: 4;
 
@@ -90,7 +90,7 @@
   }
 }
 
-@include Responsive(XL) {
+@include Responsive(XXL) {
   .imageArea {
     --columns: 5;
   }

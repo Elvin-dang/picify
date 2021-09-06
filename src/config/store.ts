@@ -1,12 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import homeSlice from "../components/Home/Home.slice";
-import signInSlice from "../components/SignIn/SignIn.slice";
-import SignUpSlice from "../components/SignUp/SignUp.slice";
+import homeSlice from "../pages/Home/Home.slice";
 import userSlice from "../shared/slices/user.slice";
 
 const rootReducer = combineReducers({
-  signIn: signInSlice,
-  signUp: SignUpSlice,
   user: userSlice,
   home: homeSlice,
 });

@@ -10,7 +10,6 @@ import { Button, Dropdown, Menu, PageHeader, Row, Typography } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import "./TheLayout.scss";
 import { AppDispatch, RootState } from "../../../config/store";
-import { resetSignInState } from "../../../components/SignIn/SignIn.slice";
 import {
   LogoutOutlined,
   ProfileOutlined,
@@ -18,6 +17,7 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 import logo from "../../../assets/image/main_logo.png";
+import TheSideBar from "../TheSideBar/TheSideBar";
 
 interface Props {
   photoURL: string | null;
@@ -48,7 +48,6 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
       } else {
         setShouldRender(false);
         history.push("/sign-in");
-        dispatch(resetSignInState());
       }
     });
     return () => {
@@ -113,46 +112,51 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
 
   return shouldRender ? (
     <div className="layoutContainer">
-      <div className="headerWrapper">
-        <PageHeader
-          title={
-            <div className="header">
-              <img className="headerLogo" src={logo} alt=""></img>
-              <Typography.Title level={1} id="logoText">
-                icify
-              </Typography.Title>
-            </div>
-          }
-          extra={[
-            <div className="extraHeader" key="1">
-              <Dropdown
-                overlay={menu}
-                placement="bottomCenter"
-                arrow
-                trigger={["click"]}
-              >
-                <Avatar
-                  size="large"
-                  src={photoURL}
-                  icon={<UserOutlined />}
-                  style={{ cursor: "pointer" }}
-                />
-              </Dropdown>
-            </div>,
-          ]}
-        />
+      <div className="sideBarWrapper">
+        <TheSideBar />
       </div>
-      <div className="contentWrapper">
-        <Switch>
-          {routes.map((route, index) => (
-            <Route
-              key={index}
-              path={route.path}
-              exact={route.exact}
-              component={route.component}
-            />
-          ))}
-        </Switch>
+      <div className="sideWrapper">
+        <div className="headerWrapper">
+          <PageHeader
+            title={
+              <div className="header">
+                <img className="headerLogo" src={logo} alt=""></img>
+                <Typography.Title level={1} id="logoText">
+                  icify
+                </Typography.Title>
+              </div>
+            }
+            extra={[
+              <div className="extraHeader" key="1">
+                <Dropdown
+                  overlay={menu}
+                  placement="bottomCenter"
+                  arrow
+                  trigger={["click"]}
+                >
+                  <Avatar
+                    size="large"
+                    src={photoURL}
+                    icon={<UserOutlined />}
+                    style={{ cursor: "pointer" }}
+                  />
+                </Dropdown>
+              </div>,
+            ]}
+          />
+        </div>
+        <div className="contentWrapper">
+          <Switch>
+            {routes.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                exact={route.exact}
+                component={route.component}
+              />
+            ))}
+          </Switch>
+        </div>
       </div>
     </div>
   ) : (

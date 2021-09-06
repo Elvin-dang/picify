@@ -1,56 +1,68 @@
 .layoutContainer {
   display: flex;
-  flex-direction: column;
-}
+  max-width: 2000px;
+  width: 100%;
 
-.headerWrapper {
-  width: 80%;
-  margin: 1rem auto;
-  border-radius: 30px;
-  background: linear-gradient(
-    to right bottom,
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 255, 255, 0.3)
-  );
-
-  & .ant-page-header-ghost {
-    border-radius: 30px;
-  }
-}
-
-.contentWrapper {
-  width: 80%;
-  margin: 1rem auto;
-  border-radius: 30px;
-  box-shadow: rgba(100, 100, 111, 0.8) 0px 7px 29px 0px;
-  background: linear-gradient(
-    to right bottom,
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 255, 255, 0.3)
-  );
-}
-
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: whitesmoke;
+  .sideBarWrapper {
+    padding: 1rem 1rem 2rem 1rem;
+    flex: 0;
   }
 
-  .headerLogo {
-    width: 4rem;
-  }
+  .sideWrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 
-  & #logoText {
-    display: inline-block;
-    margin-bottom: 0;
-    line-height: 1.8;
-    font-family: "Pacifico", cursive;
+    .headerWrapper {
+      width: 95%;
+      margin: 1rem auto;
+      border-radius: 30px;
+      background: linear-gradient(
+        to right bottom,
+        rgba(255, 255, 255, 0.7),
+        rgba(255, 255, 255, 0.3)
+      );
+
+      & .ant-page-header-ghost {
+        border-radius: 30px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: whitesmoke;
+        }
+
+        .headerLogo {
+          width: 4rem;
+        }
+
+        & #logoText {
+          display: inline-block;
+          margin-bottom: 0;
+          line-height: 1.8;
+          font-family: "Pacifico", cursive;
+        }
+      }
+    }
+
+    .contentWrapper {
+      width: 95%;
+      margin: 1rem auto 2rem auto;
+      border-radius: 30px;
+      box-shadow: rgba(100, 100, 111, 0.8) 0px 7px 29px 0px;
+      background: linear-gradient(
+        to right bottom,
+        rgba(255, 255, 255, 0.7),
+        rgba(255, 255, 255, 0.3)
+      );
+    }
   }
 }
 
