@@ -54,7 +54,8 @@
 
     & .imageCard {
       --scale: 1.125;
-      .skeleton {
+
+      &.skeleton {
         width: calc(calc(100% / 2) - var(--spacing));
 
         &:nth-child(2) {
@@ -71,7 +72,8 @@
 
     & .imageCard {
       --scale: 1.15;
-      .skeleton {
+
+      &.skeleton {
         width: calc(calc(100% / 3) - var(--spacing));
 
         &:nth-child(3) {
@@ -89,7 +91,7 @@
     & .imageCard {
       --scale: 1.175;
 
-      .skeleton {
+      &.skeleton {
         width: calc(calc(100% / 4) - var(--spacing));
 
         &:nth-child(4) {
