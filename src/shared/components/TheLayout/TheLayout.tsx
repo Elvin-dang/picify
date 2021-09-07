@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link, Route, Switch, useHistory } from "react-router-dom";
@@ -6,7 +6,15 @@ import { auth } from "../../../config/firebase";
 import { connect } from "react-redux";
 import { setUserState } from "../../slices/user.slice";
 import routes from "../../../config/routes";
-import { Button, Dropdown, Menu, PageHeader, Row, Typography } from "antd";
+import {
+  Button,
+  Dropdown,
+  Menu,
+  PageHeader,
+  Row,
+  Spin,
+  Typography,
+} from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import "./TheLayout.scss";
 import { AppDispatch, RootState } from "../../../config/store";
@@ -21,12 +29,10 @@ import TheSideBar from "../TheSideBar/TheSideBar";
 
 interface Props {
   photoURL: string | null;
-  displayName: string | null;
-  email: string | null;
   dispatch: AppDispatch;
 }
 
-const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
+const TheLayout = ({ photoURL, dispatch }: Props) => {
   const history = useHistory();
   const [shouldRender, setShouldRender] = useState<boolean>(false);
 
@@ -47,7 +53,7 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
         setShouldRender(true);
       } else {
         setShouldRender(false);
-        history.push("/sign-in");
+        history.push("/sign-in", { from: history.location });
       }
     });
     return () => {
@@ -62,17 +68,6 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
 
   const menu = (
     <Menu>
-      {displayName || email ? (
-        <Menu.Item key={0}>
-          <Row justify="center" align="middle">
-            <Typography.Title level={5} style={{ margin: 0 }}>
-              {displayName ? displayName : email ? email : ""}
-            </Typography.Title>
-          </Row>
-        </Menu.Item>
-      ) : (
-        <></>
-      )}
       <Menu.Item key={1}>
         <Link to="/profile">
           <Row gutter={24} align="middle">
@@ -146,16 +141,31 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
           />
         </div>
         <div className="contentWrapper">
-          <Switch>
-            {routes.map((route, index) => (
-              <Route
-                key={index}
-                path={route.path}
-                exact={route.exact}
-                component={route.component}
-              />
-            ))}
-          </Switch>
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "2rem 0",
+                }}
+              >
+                <Spin size="large" />
+              </div>
+            }
+          >
+            <Switch>
+              {routes.map((route, index) => (
+                <Route
+                  key={index}
+                  path={route.path}
+                  exact={route.exact}
+                  component={route.component}
+                />
+              ))}
+            </Switch>
+          </Suspense>
         </div>
       </div>
     </div>
@@ -166,8 +176,6 @@ const TheLayout = ({ photoURL, displayName, email, dispatch }: Props) => {
 
 const mapState = ({ user }: RootState) => ({
   photoURL: user.photoURL,
-  displayName: user.displayName,
-  email: user.email,
 });
 
 export default connect(mapState)(TheLayout);

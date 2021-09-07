@@ -16,12 +16,12 @@ import ConfirmModal from "../../shared/components/ConfirmModal/ConfirmModal";
 import { toTimeString } from "../../utils/time";
 import AddPictureModal from "./components/AddPictureModal/AddPictureModal";
 import PictureDetailModal from "./components/PictureDetailModal/PictureDetailModal";
-import "./Home.scss";
+import "./styles.scss";
 import {
   deletePictureAsyncAction,
   getPictureAsyncAction,
   PicturesType,
-} from "./Home.slice";
+} from "./Picture.slice";
 interface Props {
   uid: string;
   pictures: PicturesType[];
@@ -50,7 +50,10 @@ const Home = ({
   }, [dispatch, uid]);
 
   useEffect(() => {
-    if (deletingPicture === "complete") setOpenDeleteConfirmModal(false);
+    if (deletingPicture === "complete") {
+      setSelectedIndex(undefined);
+      setOpenDeleteConfirmModal(false);
+    }
   }, [deletingPicture]);
 
   const copyToClipboard = (value: string) => {
@@ -232,11 +235,11 @@ const Home = ({
   );
 };
 
-const mapState = ({ home, user }: RootState) => ({
+const mapState = ({ picture, user }: RootState) => ({
   uid: user.uid,
-  pictures: home.pictures,
-  fetchingPicture: home.fetchingPicture,
-  deletingPicture: home.deletingPicture,
+  pictures: picture.pictures,
+  fetchingPicture: picture.fetchingPicture,
+  deletingPicture: picture.deletingPicture,
 });
 
 export default connect(mapState)(Home);

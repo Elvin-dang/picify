@@ -107,7 +107,7 @@ img {
   }
   &__box {
     display: grid;
-    grid-template-columns: max-content 1fr;
+    grid-template-columns: max-content 1fr max-content;
     column-gap: 0.8rem;
     padding: 1.8rem 1.6rem;
     background-color: #fff;
@@ -136,6 +136,10 @@ img {
 
     & svg {
       color: var(--first-color);
+    }
+
+    &-password {
+      font-size: 2rem;
     }
   }
   &__input {

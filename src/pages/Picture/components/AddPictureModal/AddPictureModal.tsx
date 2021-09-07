@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { AppDispatch, RootState } from "../../../../config/store";
 import ConfirmModal from "../../../../shared/components/ConfirmModal/ConfirmModal";
-import { addPictureAsyncAction, PicturesType } from "../../Home.slice";
+import { addPictureAsyncAction, PicturesType } from "../../Picture.slice";
 import UploadBox from "../UploadBox/UploadBox";
 import "./AddPictureModal.scss";
 
@@ -147,11 +147,11 @@ const AddPictureModal = ({
   );
 };
 
-const mapState = ({ user, home }: RootState) => ({
+const mapState = ({ user, picture }: RootState) => ({
   uid: user.uid,
-  uploadingPicture: home.uploadingPicture,
-  uploadProgress: home.uploadProgress,
-  pictures: home.pictures,
+  uploadingPicture: picture.uploadingPicture,
+  uploadProgress: picture.uploadProgress,
+  pictures: picture.pictures,
 });
 
 export default connect(mapState)(AddPictureModal);

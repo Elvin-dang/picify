@@ -1,10 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import homeSlice from "../pages/Home/Home.slice";
+import pictureSlice from "../pages/Picture/Picture.slice";
 import userSlice from "../shared/slices/user.slice";
 
 const rootReducer = combineReducers({
   user: userSlice,
-  home: homeSlice,
+  picture: pictureSlice,
 });
 
 export const store = configureStore({

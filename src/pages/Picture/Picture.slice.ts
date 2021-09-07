@@ -19,7 +19,7 @@ export interface PicturesType {
   contentType: string | undefined;
 }
 
-interface HomeState {
+export interface PictureState {
   pictures: PicturesType[];
   fetchingPicture: boolean;
   uploadingPicture: "none" | "uploading" | "complete";
@@ -27,7 +27,7 @@ interface HomeState {
   deletingPicture: "none" | "deleting" | "complete";
 }
 
-const initialState: HomeState = {
+const initialState: PictureState = {
   pictures: [],
   fetchingPicture: false,
   uploadingPicture: "none",
@@ -36,7 +36,7 @@ const initialState: HomeState = {
 };
 
 export const getPictureAsyncAction = createAsyncThunk(
-  "Home/GetPicture",
+  "Picture/GetPicture",
   async (uid: string) => {
     const imageRef = ref(storage, uid);
 
@@ -65,7 +65,7 @@ export const getPictureAsyncAction = createAsyncThunk(
 );
 
 export const addPictureAsyncAction = createAsyncThunk(
-  "Home/AddPicture",
+  "Picture/AddPicture",
   async (
     {
       uid,
@@ -88,7 +88,7 @@ export const addPictureAsyncAction = createAsyncThunk(
         "state_changed",
         (snapshot) => {
           thunkAPI.dispatch(
-            setHomeState({
+            setPictureState({
               uploadProgress: Math.floor(
                 (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
               ),
@@ -97,14 +97,14 @@ export const addPictureAsyncAction = createAsyncThunk(
         },
         (error) => {
           message.error("[ADD_PICTURE] " + error.message);
-          thunkAPI.dispatch(setHomeState({ uploadingPicture: "complete" }));
-          thunkAPI.dispatch(setHomeState({ uploadingPicture: "none" }));
+          thunkAPI.dispatch(setPictureState({ uploadingPicture: "complete" }));
+          thunkAPI.dispatch(setPictureState({ uploadingPicture: "none" }));
         },
         async () => {
           const url = await getDownloadURL(uploadTask.snapshot.ref);
           const metaData = await getMetadata(uploadTask.snapshot.ref);
 
-          thunkAPI.dispatch(setHomeState({ uploadingPicture: "complete" }));
+          thunkAPI.dispatch(setPictureState({ uploadingPicture: "complete" }));
           thunkAPI.dispatch(
             addPictureComplete({
               name: metaData.name,
@@ -122,31 +122,39 @@ export const addPictureAsyncAction = createAsyncThunk(
 );
 
 export const deletePictureAsyncAction = createAsyncThunk(
-  "Home/Delete",
-  async ({
-    uid,
-    imageName,
-  }: {
-    uid: string;
-    imageName: string | undefined;
-  }) => {
+  "Picture/Delete",
+  async (
+    {
+      uid,
+      imageName,
+    }: {
+      uid: string;
+      imageName: string | undefined;
+    },
+    thunkAPI,
+  ) => {
     if (imageName !== undefined) {
       const imageRef = ref(storage, `${uid}/${imageName}`);
       await deleteObject(imageRef);
+      thunkAPI.dispatch(
+        setPictureState({
+          deletingPicture: "complete",
+        }),
+      );
     }
 
     return imageName;
   },
 );
 
-const HomeSlice = createSlice({
-  name: "Home",
+const PictureSlice = createSlice({
+  name: "Picture",
   initialState,
   reducers: {
-    setHomeState: (state, action: PayloadAction<Partial<HomeState>>) => {
+    setPictureState: (state, action: PayloadAction<Partial<PictureState>>) => {
       return { ...state, ...action.payload };
     },
-    resetHomeState: () => {
+    resetPictureState: () => {
       return initialState;
     },
     addPictureComplete: (state, action: PayloadAction<PicturesType>) => {
@@ -202,7 +210,6 @@ const HomeSlice = createSlice({
         if (deletePictureIndex > -1)
           state.pictures.splice(deletePictureIndex, 1);
       }
-      state.deletingPicture = "complete";
     },
     [deletePictureAsyncAction.rejected.toString()]: (state, action) => {
       message.error("[DELETE_PICTURE] " + action.error.message);
@@ -211,6 +218,6 @@ const HomeSlice = createSlice({
   },
 });
 
-export const { setHomeState, resetHomeState, addPictureComplete } =
-  HomeSlice.actions;
-export default HomeSlice.reducer;
+export const { setPictureState, resetPictureState, addPictureComplete } =
+  PictureSlice.actions;
+export default PictureSlice.reducer;

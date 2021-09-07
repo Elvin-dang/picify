@@ -1,7 +1,10 @@
 import React, { FormEvent, ReactElement, useState } from "react";
-import "./SignInAndSignUp.scss";
+import "./styles.scss";
 import loginLogo from "../../assets/image/login_logo.svg";
 import {
+  EditOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
   FacebookFilled,
   GoogleCircleFilled,
   LoadingOutlined,
@@ -12,6 +15,7 @@ import { useRef } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "@firebase/auth";
 import { auth } from "../../config/firebase";
 import { useHistory } from "react-router-dom";
@@ -26,8 +30,14 @@ function SignInAndSignUp(props: Props): ReactElement {
   const [loginUpErrorMessage, setLoginUpErrorMessage] = useState<string>();
   const [loginInLoading, setLoginInLoading] = useState<boolean>(false);
   const [loginUpLoading, setLoginUpLoading] = useState<boolean>(false);
+  const [loginInShowPassword, setLoginInShowPassword] =
+    useState<boolean>(false);
+  const [loginUpShowPassword, setLoginUpShowPassword] =
+    useState<boolean>(false);
 
   const history = useHistory();
+  const { from } =
+    history.location.state || ({ from: { pathname: "/" } } as any);
 
   const loginInRef = useRef<HTMLFormElement>(null);
   const loginUpRef = useRef<HTMLFormElement>(null);
@@ -35,6 +45,7 @@ function SignInAndSignUp(props: Props): ReactElement {
   const loginInEmailRef = useRef<HTMLInputElement>(null);
   const loginInPasswordRef = useRef<HTMLInputElement>(null);
 
+  const loginUpDisplayNameRef = useRef<HTMLInputElement>(null);
   const loginUpEmailRef = useRef<HTMLInputElement>(null);
   const loginUpPasswordRef = useRef<HTMLInputElement>(null);
   const loginUpConfirmPasswordRef = useRef<HTMLInputElement>(null);
@@ -62,6 +73,7 @@ function SignInAndSignUp(props: Props): ReactElement {
     if (
       loginInEmailRef.current &&
       loginInPasswordRef.current &&
+      loginUpDisplayNameRef.current &&
       loginUpEmailRef.current &&
       loginUpPasswordRef.current &&
       loginUpConfirmPasswordRef.current
@@ -69,16 +81,22 @@ function SignInAndSignUp(props: Props): ReactElement {
       if (value === "signIn") {
         loginInEmailRef.current.value = "";
         loginInPasswordRef.current.value = "";
+        setLoginInShowPassword(false);
       } else if (value === "signUp") {
+        loginUpDisplayNameRef.current.value = "";
         loginUpEmailRef.current.value = "";
         loginUpPasswordRef.current.value = "";
         loginUpConfirmPasswordRef.current.value = "";
+        setLoginUpShowPassword(false);
       } else {
         loginInEmailRef.current.value = "";
         loginInPasswordRef.current.value = "";
+        loginUpDisplayNameRef.current.value = "";
         loginUpEmailRef.current.value = "";
         loginUpPasswordRef.current.value = "";
         loginUpConfirmPasswordRef.current.value = "";
+        setLoginInShowPassword(false);
+        setLoginUpShowPassword(false);
       }
     }
   };
@@ -105,7 +123,7 @@ function SignInAndSignUp(props: Props): ReactElement {
           loginInEmailRef.current.value,
           loginInPasswordRef.current.value,
         );
-        history.push("/");
+        history.replace(from);
       } catch (err: any) {
         setLoginInLoading(false);
         setLoginInErrorMessage(codeToString(err.code.split("/")[1]));
@@ -117,10 +135,18 @@ function SignInAndSignUp(props: Props): ReactElement {
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
+      loginUpDisplayNameRef.current &&
       loginUpEmailRef.current &&
       loginUpPasswordRef.current &&
       loginUpConfirmPasswordRef.current
     ) {
+      // Display name check
+      if (loginUpDisplayNameRef.current.value.length > 30) {
+        setLoginUpErrorMessage("Display name must less than 30 characters");
+        setTimeout(() => setLoginUpErrorMessage(undefined), 10000);
+        return;
+      }
+
       // Email check
       if (
         !loginUpEmailRef.current.value.match(
@@ -150,6 +176,11 @@ function SignInAndSignUp(props: Props): ReactElement {
           loginUpEmailRef.current.value,
           loginUpPasswordRef.current.value,
         );
+        if (auth.currentUser) {
+          await updateProfile(auth.currentUser, {
+            displayName: loginUpDisplayNameRef.current.value,
+          });
+        }
         await auth.signOut();
         handleChange("signIn");
         setLoginUpLoading(false);
@@ -207,12 +238,25 @@ function SignInAndSignUp(props: Props): ReactElement {
             <div className="login__box">
               <LockOutlined className="login__icon" />
               <input
-                type="password"
+                type={loginInShowPassword ? "text" : "password"}
                 placeholder="Password"
                 className="login__input"
                 required
                 ref={loginInPasswordRef}
               />
+              {loginInShowPassword ? (
+                <EyeInvisibleOutlined
+                  className="login__icon-password"
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={() => setLoginInShowPassword(false)}
+                />
+              ) : (
+                <EyeOutlined
+                  className="login__icon-password"
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={() => setLoginInShowPassword(true)}
+                />
+              )}
             </div>
 
             <div
@@ -248,6 +292,15 @@ function SignInAndSignUp(props: Props): ReactElement {
                 {" Sign Up"}
               </span>
             </div>
+
+            <div className="login__social">
+              <button className="login__social-icon">
+                <FacebookFilled />
+              </button>
+              <button className="login__social-icon google">
+                <GoogleCircleFilled />
+              </button>
+            </div>
           </form>
 
           <form
@@ -259,6 +312,17 @@ function SignInAndSignUp(props: Props): ReactElement {
           >
             <img className="login__logo" src={logo} alt=""></img>
             <h1 className="login__title">Create Account</h1>
+
+            <div className="login__box">
+              <EditOutlined className="login__icon" />
+              <input
+                type="text"
+                placeholder="Display Name"
+                className="login__input"
+                required
+                ref={loginUpDisplayNameRef}
+              />
+            </div>
 
             <div className="login__box">
               <UserOutlined className="login__icon" />
@@ -274,23 +338,49 @@ function SignInAndSignUp(props: Props): ReactElement {
             <div className="login__box">
               <LockOutlined className="login__icon" />
               <input
-                type="password"
+                type={loginUpShowPassword ? "text" : "password"}
                 placeholder="Password"
                 className="login__input"
                 required
                 ref={loginUpPasswordRef}
               />
+              {loginUpShowPassword ? (
+                <EyeInvisibleOutlined
+                  className="login__icon-password"
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={() => setLoginUpShowPassword(false)}
+                />
+              ) : (
+                <EyeOutlined
+                  className="login__icon-password"
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={() => setLoginUpShowPassword(true)}
+                />
+              )}
             </div>
 
             <div className="login__box">
               <LockOutlined className="login__icon" />
               <input
-                type="password"
+                type={loginUpShowPassword ? "text" : "password"}
                 placeholder="Confirm Password"
                 className="login__input"
                 required
                 ref={loginUpConfirmPasswordRef}
               />
+              {loginUpShowPassword ? (
+                <EyeInvisibleOutlined
+                  className="login__icon-password"
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={() => setLoginUpShowPassword(false)}
+                />
+              ) : (
+                <EyeOutlined
+                  className="login__icon-password"
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={() => setLoginUpShowPassword(true)}
+                />
+              )}
             </div>
 
             <div
@@ -323,15 +413,6 @@ function SignInAndSignUp(props: Props): ReactElement {
               >
                 {" Sign In"}
               </span>
-            </div>
-
-            <div className="login__social">
-              <button className="login__social-icon">
-                <FacebookFilled />
-              </button>
-              <button className="login__social-icon google">
-                <GoogleCircleFilled />
-              </button>
             </div>
           </form>
         </div>

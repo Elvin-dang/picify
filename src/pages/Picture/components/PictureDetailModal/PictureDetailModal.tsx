@@ -2,7 +2,7 @@ import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import React from "react";
 import "./PictureDetailModal.scss";
 import { useRef } from "react";
-import { PicturesType } from "../../Home.slice";
+import { PicturesType } from "../../Picture.slice";
 
 interface Props {
   open: boolean;

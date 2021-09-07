@@ -1,6 +1,6 @@
 .sideBar {
   font-family: "Montserrat";
-  width: 200px;
+  width: 256px;
   background-color: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(5px);
   border-radius: 30px;
@@ -10,6 +10,7 @@
   top: 10px;
   z-index: 2;
   animation: bubble 1s infinite;
+  animation-delay: 0.5s;
 
   @keyframes bubble {
     0% {
@@ -50,6 +51,22 @@
       font-family: "Inconsolata", monospace;
       font-weight: bolder;
       font-size: 16px;
+      overflow: hidden;
+
+      h3 {
+        font-weight: bolder;
+        margin: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      div {
+        color: rgba(0, 0, 0, 0.55);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
 
     .sideBarBtn {

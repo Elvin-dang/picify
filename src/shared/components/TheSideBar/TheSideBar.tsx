@@ -7,27 +7,55 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Typography } from "antd";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import { RootState } from "../../../config/store";
+import { useWindowSize } from "../../customHooks";
 import "./TheSideBar.scss";
 
-interface Props {}
+interface Props {
+  photoURL: string | null;
+  displayName: string | null;
+  email: string | null;
+}
 
-const TheSideBar = (props: Props) => {
+const TheSideBar = ({ photoURL, displayName, email }: Props) => {
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
+  const [width] = useWindowSize();
+  const location = useLocation();
+
+  let checkPath = (path: string) => {
+    if (location.pathname === path) return "active";
+    return undefined;
+  };
 
   const toggleSideBar = () => setIsCollapse(!isCollapse);
 
   return (
-    <div className={isCollapse ? "sideBar collapse" : "sideBar"}>
+    <div
+      className={isCollapse || width <= 768 ? "sideBar collapse" : "sideBar"}
+    >
       <div className="topBar">
-        {isCollapse ? (
-          <Avatar style={{ backgroundColor: "rgba(255, 255, 255, 0.6)" }}>
-            E
+        {isCollapse || width <= 768 ? (
+          <Avatar
+            style={{ backgroundColor: "rgba(255, 255, 255, 0.6)" }}
+            src={photoURL}
+          >
+            {displayName?.charAt(0).toLocaleUpperCase()}
           </Avatar>
         ) : (
-          <span>Elvin</span>
+          <span>
+            <h3>{displayName}</h3>
+            <div>{email}</div>
+          </span>
         )}
-        <CaretLeftFilled className="sideBarBtn" onClick={toggleSideBar} />
+        <CaretLeftFilled
+          className="sideBarBtn"
+          onClick={toggleSideBar}
+          style={
+            width <= 768 ? { pointerEvents: "none", opacity: "0.5" } : undefined
+          }
+        />
       </div>
       <div className="logoGroup">
         <Link to="/" className="logoIcon">
@@ -43,19 +71,19 @@ const TheSideBar = (props: Props) => {
       <div className="menu">
         <ul>
           <li>
-            <Link to="/" className="active">
+            <Link to="/pictures" className={checkPath("/pictures")}>
               <CameraOutlined className="icon" />
-              <span className="text">Image</span>
+              <span className="text">Picture</span>
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/videos" className={checkPath("/videos")}>
               <VideoCameraOutlined className="icon" />
               <span className="text">Video</span>
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/social" className={checkPath("/social")}>
               <GlobalOutlined className="icon" />
               <span className="text">Social</span>
             </Link>
@@ -103,4 +131,10 @@ const TheSideBar = (props: Props) => {
   );
 };
 
-export default TheSideBar;
+const mapState = ({ user }: RootState) => ({
+  photoURL: user.photoURL,
+  displayName: user.displayName,
+  email: user.email,
+});
+
+export default connect(mapState)(TheSideBar);
