@@ -7,10 +7,11 @@ interface Props {
   onCancel: () => void;
   styles?: CSSProperties;
   confirmButton?: ReactNode;
-  content: ReactNode;
   moreInfo?: ReactNode;
   theme?: string;
   icon?: ReactNode;
+  children: ReactNode;
+  width?: number;
 }
 
 const ConfirmModal = ({
@@ -18,10 +19,11 @@ const ConfirmModal = ({
   onCancel,
   styles,
   confirmButton,
-  content,
   moreInfo,
   theme,
   icon,
+  children,
+  width,
 }: Props) => {
   return (
     <Modal
@@ -30,14 +32,14 @@ const ConfirmModal = ({
       onCancel={onCancel}
       closable={false}
       footer={null}
-      width={400}
+      width={width ? width : 400}
     >
       <div
         className="CMContainer"
         style={theme ? { ["--main-theme" as any]: theme } : undefined}
       >
         {icon ? <div className="icon">{icon}</div> : null}
-        <div className="content">{content}</div>
+        <div className="content">{children}</div>
         {moreInfo ? <div className="moreInfo">{moreInfo}</div> : null}
         <div className="action">
           {confirmButton ? (

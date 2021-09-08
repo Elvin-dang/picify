@@ -6,7 +6,7 @@ import { UserState } from "../../shared/slices/user.slice";
 import { getPictureAsyncAction, PictureState } from "../Picture/Picture.slice";
 import Spinner from "../../shared/components/Spinner";
 import { FormOutlined } from "@ant-design/icons";
-import ConfirmModal from "../../shared/components/ConfirmModal/ConfirmModal";
+import UpdateProfileModal from "./components/UpdateProfileModal";
 
 interface Props {
   user: UserState;
@@ -97,10 +97,9 @@ const Profile = ({ user, picture, dispatch }: Props) => {
           </div>
         </div>
       )}
-      <ConfirmModal
-        open={openEditProfileModal}
+      <UpdateProfileModal
+        openEditProfileModal={openEditProfileModal}
         onCancel={() => setOpenEditProfileModal(false)}
-        content={"hello"}
       />
     </div>
   );

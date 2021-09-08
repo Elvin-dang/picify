@@ -202,9 +202,6 @@ const Home = ({
       <ConfirmModal
         open={openDeleteConfirmModal}
         onCancel={() => setOpenDeleteConfirmModal(false)}
-        content={`Are you sure to delete "${
-          selectedIndex !== undefined ? pictures[selectedIndex].name : undefined
-        }" ?`}
         moreInfo={"Delete perpetually and can not be reverted"}
         theme="red"
         icon={<DeleteOutlined />}
@@ -230,7 +227,11 @@ const Home = ({
             Delete
           </button>
         }
-      />
+      >
+        Are you sure to delete "
+        {selectedIndex !== undefined ? pictures[selectedIndex].name : undefined}
+        " ?
+      </ConfirmModal>
     </div>
   );
 };

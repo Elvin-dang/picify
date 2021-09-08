@@ -135,13 +135,14 @@ const AddPictureModal = ({
         <ConfirmModal
           open={openWaringModal}
           onCancel={() => setOpenWarningModel(false)}
-          content={"Image has been duplicate name. Are you sure to continue ?"}
           moreInfo={
             "Keep uploading will overwrite the picture which has the same name"
           }
           confirmButton={<button onClick={forceUpload}>Accept</button>}
           icon={<WarningOutlined />}
-        />
+        >
+          Image has been duplicate name. Are you sure to continue ?
+        </ConfirmModal>
       </div>
     </Modal>
   );
