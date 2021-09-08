@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import "./styles.scss";
 import { AppDispatch, RootState } from "../../config/store";
 import { UserState } from "../../shared/slices/user.slice";
 import { getPictureAsyncAction, PictureState } from "../Picture/Picture.slice";
 import Spinner from "../../shared/components/Spinner";
+import { FormOutlined } from "@ant-design/icons";
+import ConfirmModal from "../../shared/components/ConfirmModal/ConfirmModal";
 
 interface Props {
   user: UserState;
@@ -13,6 +15,9 @@ interface Props {
 }
 
 const Profile = ({ user, picture, dispatch }: Props) => {
+  const [openEditProfileModal, setOpenEditProfileModal] =
+    useState<boolean>(false);
+
   useEffect(() => {
     dispatch(getPictureAsyncAction(user.uid));
   }, [dispatch, user.uid]);
@@ -34,7 +39,18 @@ const Profile = ({ user, picture, dispatch }: Props) => {
         </div>
         <div className="information">
           <div className="wrapper">
-            <h2>{user.displayName}</h2>
+            <h2>
+              {user.displayName}
+              <div className="group">
+                <button
+                  className="two"
+                  onClick={() => setOpenEditProfileModal(true)}
+                >
+                  <FormOutlined />
+                  <div className="bg"></div>
+                </button>
+              </div>
+            </h2>
             <h3>{user.email}</h3>
           </div>
           <div className="tag">Free</div>
@@ -52,33 +68,40 @@ const Profile = ({ user, picture, dispatch }: Props) => {
           <Spinner />
         </div>
       ) : (
-        <div className="usageBox">
-          <div className="statistic">
-            <div
-              className="box image"
-              style={
-                {
-                  "--progress": `${(pictureUsagePercentage() / 50) * 100}%`,
-                } as any
-              }
-            >
-              <div className="title">Picture</div>
-              <div className="number">{picture.pictures.length}</div>
-              <div className="progress">
-                {pictureUsagePercentage().toFixed(2)}MB
+        <div>
+          <div className="usageBox">
+            <div className="statistic">
+              <div
+                className="box image"
+                style={
+                  {
+                    "--progress": `${(pictureUsagePercentage() / 50) * 100}%`,
+                  } as any
+                }
+              >
+                <div className="title">Picture</div>
+                <div className="number">{picture.pictures.length}</div>
+                <div className="progress">
+                  {pictureUsagePercentage().toFixed(2)}MB
+                </div>
+              </div>
+              <div className="box video">
+                <div className="title">Video</div>
+                <div className="number">0</div>
+                <div className="progress">0MB</div>
               </div>
             </div>
-            <div className="box video">
-              <div className="title">Video</div>
-              <div className="number">0</div>
-              <div className="progress">0MB</div>
+            <div className="action">
+              <button>Upgrade</button>
             </div>
-          </div>
-          <div className="action">
-            <button>Upgrade</button>
           </div>
         </div>
       )}
+      <ConfirmModal
+        open={openEditProfileModal}
+        onCancel={() => setOpenEditProfileModal(false)}
+        content={"hello"}
+      />
     </div>
   );
 };

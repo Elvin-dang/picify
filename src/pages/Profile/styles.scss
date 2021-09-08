@@ -59,6 +59,60 @@
           text-overflow: ellipsis;
           white-space: nowrap;
         }
+
+        .group {
+          position: relative;
+          z-index: 1;
+          display: inline-block;
+          margin-left: -10px;
+          padding: 0 10px;
+
+          button {
+            border: none;
+            cursor: pointer;
+            background: none;
+            padding: 0;
+          }
+
+          .two {
+            text-decoration: none;
+            width: 40px;
+
+            .bg {
+              height: 40px;
+              width: 40px;
+              position: absolute;
+              top: 0;
+              left: -300px;
+              z-index: -1;
+              transition: 0.3s;
+              border-radius: 20px 0 0 20px;
+            }
+          }
+
+          span:hover {
+            margin-left: 5px;
+
+            & + .bg {
+              left: 15px;
+              background: linear-gradient(
+                to right bottom,
+                rgba(255, 255, 255, 0.7),
+                rgba(255, 255, 255, 0.3)
+              );
+              border-radius: 20px;
+            }
+          }
+
+          .two span:hover {
+            color: #000;
+          }
+
+          span {
+            padding: 10px;
+            transition: 0.3s;
+          }
+        }
       }
 
       .tag {
@@ -115,7 +169,6 @@
         }
 
         .progress {
-          height: 20px;
           border-radius: 5px;
           background: linear-gradient(
             to right bottom,
@@ -129,7 +182,7 @@
           &::before {
             content: "";
             position: absolute;
-            height: 20px;
+            height: 100%;
             border-radius: 5px;
             top: 0;
             right: 0;
@@ -165,6 +218,34 @@
           rgba(255, 255, 255, 0.7),
           rgba(255, 255, 255, 0.3)
         );
+        transition: 2s;
+
+        &:hover {
+          animation: spin;
+          animation-duration: 2s;
+          background-color: gold;
+        }
+
+        @keyframes spin {
+          0% {
+            transform: scale(1, 1);
+          }
+          20% {
+            transform: scale(1.1, 1.1) translateY(5px);
+          }
+          50% {
+            transform: scale(1.1, 1.1) translateY(-10px);
+          }
+          60% {
+            transform: scale(1.1, 1.1) translateY(5px);
+          }
+          90% {
+            transform: scale(1.1, 1.1) translateY(-15px);
+          }
+          100% {
+            transform: scale(1, 1);
+          }
+        }
       }
     }
   }
