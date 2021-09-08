@@ -21,7 +21,6 @@ import { auth } from "../../config/firebase";
 import { useHistory } from "react-router-dom";
 import { message } from "antd";
 import { codeToString } from "../../utils/string";
-import logo from "../../assets/image/main_logo.png";
 
 interface Props {}
 
@@ -221,7 +220,7 @@ function SignInAndSignUp(props: Props): ReactElement {
             ref={loginInRef}
             onSubmit={handleSignIn}
           >
-            <img className="login__logo" src={logo} alt=""></img>
+            <img className="login__logo" src="main_logo.png" alt=""></img>
             <h1 className="login__title">Sign In</h1>
 
             <div className="login__box">
@@ -310,7 +309,7 @@ function SignInAndSignUp(props: Props): ReactElement {
             ref={loginUpRef}
             onSubmit={handleSignUp}
           >
-            <img className="login__logo" src={logo} alt=""></img>
+            <img className="login__logo" src="main_logo.png" alt=""></img>
             <h1 className="login__title">Create Account</h1>
 
             <div className="login__box">

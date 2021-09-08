@@ -24,7 +24,6 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
-import logo from "../../../assets/image/main_logo.png";
 import TheSideBar from "../TheSideBar/TheSideBar";
 
 interface Props {
@@ -115,7 +114,7 @@ const TheLayout = ({ photoURL, dispatch }: Props) => {
           <PageHeader
             title={
               <div className="header">
-                <img className="headerLogo" src={logo} alt=""></img>
+                <img className="headerLogo" src="main_logo.png" alt=""></img>
                 <Typography.Title level={1} id="logoText">
                   icify
                 </Typography.Title>
