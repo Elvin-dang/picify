@@ -5,8 +5,9 @@ import { AppDispatch, RootState } from "../../config/store";
 import { UserState } from "../../shared/slices/user.slice";
 import { getPictureAsyncAction, PictureState } from "../Picture/Picture.slice";
 import Spinner from "../../shared/components/Spinner";
-import { FormOutlined } from "@ant-design/icons";
+import { CameraOutlined, FormOutlined } from "@ant-design/icons";
 import UpdateProfileModal from "./components/UpdateProfileModal";
+import UpdateAvatarModal from "./components/UpdateAvatarModal";
 
 interface Props {
   user: UserState;
@@ -16,6 +17,8 @@ interface Props {
 
 const Profile = ({ user, picture, dispatch }: Props) => {
   const [openEditProfileModal, setOpenEditProfileModal] =
+    useState<boolean>(false);
+  const [openEditAvatarModal, setOpenEditAvatarModal] =
     useState<boolean>(false);
 
   useEffect(() => {
@@ -34,8 +37,11 @@ const Profile = ({ user, picture, dispatch }: Props) => {
         <img src="background.jpg" alt="" />
       </div>
       <div className="content">
-        <div className="avatar">
-          <img src="avatar.png" alt="" />
+        <div className="avatar" onClick={() => setOpenEditAvatarModal(true)}>
+          <img src={user.photoURL ? user.photoURL : "avatar.png"} alt="" />
+          <div className="layer">
+            <CameraOutlined />
+          </div>
         </div>
         <div className="information">
           <div className="wrapper">
@@ -100,6 +106,10 @@ const Profile = ({ user, picture, dispatch }: Props) => {
       <UpdateProfileModal
         openEditProfileModal={openEditProfileModal}
         onCancel={() => setOpenEditProfileModal(false)}
+      />
+      <UpdateAvatarModal
+        openEditAvatarModal={openEditAvatarModal}
+        onCancel={() => setOpenEditAvatarModal(false)}
       />
     </div>
   );

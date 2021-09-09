@@ -38,7 +38,7 @@ const initialState: PictureState = {
 export const getPictureAsyncAction = createAsyncThunk(
   "Picture/GetPicture",
   async (uid: string) => {
-    const imageRef = ref(storage, uid);
+    const imageRef = ref(storage, `${uid}/pictures`);
 
     // Find all the prefixes and items.
     const images = await listAll(imageRef);
@@ -81,7 +81,7 @@ export const addPictureAsyncAction = createAsyncThunk(
     if (image) {
       const imageRef = ref(
         storage,
-        `${uid}/${customName ? customName : image.name}`,
+        `${uid}/pictures/${customName ? customName : image.name}`,
       );
       const uploadTask = uploadBytesResumable(imageRef, image);
       uploadTask.on(
@@ -134,7 +134,7 @@ export const deletePictureAsyncAction = createAsyncThunk(
     thunkAPI,
   ) => {
     if (imageName !== undefined) {
-      const imageRef = ref(storage, `${uid}/${imageName}`);
+      const imageRef = ref(storage, `${uid}/pictures/${imageName}`);
       await deleteObject(imageRef);
       thunkAPI.dispatch(
         setPictureState({

@@ -1,0 +1,161 @@
+.updateAvatarModalContainer {
+  .header {
+    position: relative;
+    margin-bottom: 70px;
+
+    > img {
+      height: 150px;
+      width: 100%;
+      border-radius: 30px 30px 15px 15px;
+      object-fit: cover;
+    }
+
+    .avatar {
+      position: absolute;
+      top: 0;
+      bottom: -60px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+
+      img {
+        height: 120px;
+        width: 120px;
+        border: 5px solid rgba($color: #ffffff, $alpha: 1);
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .backAction {
+    text-align: start;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+
+    span:first-child {
+      background: rgb(218, 218, 218);
+      padding: 0.5rem 2rem;
+      border-radius: 10px;
+      cursor: pointer;
+
+      &:hover {
+        animation: toLeft 1s infinite;
+
+        @keyframes toLeft {
+          0% {
+            transform: translateX(0);
+          }
+          50% {
+            transform: translateX(-10px);
+          }
+          0% {
+            transform: translateX(0);
+          }
+        }
+      }
+
+      &.disable {
+        opacity: 0.5;
+        cursor: not-allowed;
+
+        &:hover {
+          animation: none;
+        }
+      }
+    }
+  }
+
+  .body {
+    .optionGroup {
+      padding: 1rem 0;
+      animation: animate-scale 0.5s;
+
+      @keyframes animate-scale {
+        0% {
+          transform: scale(1, 1);
+        }
+        50% {
+          transform: scale(1.05, 1.05);
+        }
+        100% {
+          transform: scale(1, 1);
+        }
+      }
+
+      .optionItem {
+        background: rgb(218, 218, 218);
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px 0;
+        cursor: pointer;
+        text-align: start;
+        font-size: 20px;
+        transition: 0.3s;
+        color: rgb(66, 66, 66);
+        backface-visibility: hidden;
+
+        > span {
+          margin-right: 10px;
+          opacity: 0.6;
+        }
+
+        &:hover {
+          background: rgb(184, 184, 184);
+          transform: perspective(1px) scale(1.05, 1.05);
+        }
+
+        &.disabled {
+          opacity: 0.3;
+          pointer-events: none;
+
+          &:hover {
+            background: rgb(218, 218, 218);
+            transform: none;
+          }
+        }
+      }
+
+      .imageContainer {
+        display: flex;
+        padding: 1rem;
+        flex-wrap: wrap;
+        max-height: 340px;
+        min-height: 340px;
+        overflow: scroll;
+        justify-content: center;
+        align-items: center;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        .image {
+          flex: 1 1 150px;
+          margin: 0.5rem;
+          border-radius: 10px;
+
+          &:hover img {
+            transform: scale(1.05);
+          }
+
+          img {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            transition: transform 0.3s;
+            object-fit: cover;
+            overflow: hidden;
+
+            &.selected {
+              border: 3px solid rgb(247, 204, 112);
+            }
+          }
+        }
+      }
+    }
+  }
+}

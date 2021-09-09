@@ -78,6 +78,7 @@ const UploadBox = ({
         hidden
         onChange={handleChangeImage}
         ref={ref}
+        accept="image/png, image/jpeg"
       />
       {previewImage ? (
         <div
