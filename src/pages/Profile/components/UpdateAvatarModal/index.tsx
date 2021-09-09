@@ -200,15 +200,30 @@ const UpdateAvatarModal = ({
     try {
       setLoading(true);
       if (newAvatar instanceof File) {
-        const imageRef = ref(storage, `${uid}/avatar/${uuidv4()}`);
-        const snapshot = await uploadBytes(imageRef, newAvatar);
-        const url = await getDownloadURL(snapshot.ref);
+        if (
+          newAvatar &&
+          (newAvatar.type === "image/jpeg" || newAvatar.type === "image/png")
+        ) {
+          if (newAvatar.size <= 10 * Math.pow(1024, 2)) {
+            const imageRef = ref(storage, `${uid}/avatar/${uuidv4()}`);
+            const snapshot = await uploadBytes(imageRef, newAvatar);
+            const url = await getDownloadURL(snapshot.ref);
 
-        if (auth.currentUser) {
-          await updateProfile(auth.currentUser, {
-            photoURL: url,
-          });
-          dispatch(setUserState({ photoURL: url }));
+            if (auth.currentUser) {
+              await updateProfile(auth.currentUser, {
+                photoURL: url,
+              });
+              dispatch(setUserState({ photoURL: url }));
+            }
+          } else {
+            message.error("Image size must be smaller than 10MB");
+            return;
+          }
+        } else {
+          message.error("File must be image (jpg/png)");
+          setNewAvatar(null);
+          setPreviewImage(undefined);
+          return;
         }
       } else {
         if (auth.currentUser) {
