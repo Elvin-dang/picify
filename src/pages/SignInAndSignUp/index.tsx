@@ -33,6 +33,7 @@ function SignInAndSignUp(props: Props): ReactElement {
     useState<boolean>(false);
   const [loginUpShowPassword, setLoginUpShowPassword] =
     useState<boolean>(false);
+  const [timeOut, setTimeOut] = useState<NodeJS.Timeout>();
 
   const history = useHistory();
   const { from } =
@@ -96,6 +97,7 @@ function SignInAndSignUp(props: Props): ReactElement {
         loginUpConfirmPasswordRef.current.value = "";
         setLoginInShowPassword(false);
         setLoginUpShowPassword(false);
+        if (timeOut) clearTimeout(timeOut);
       }
     }
   };
@@ -111,7 +113,7 @@ function SignInAndSignUp(props: Props): ReactElement {
         )
       ) {
         setLoginInErrorMessage("First field must be an email");
-        setTimeout(() => setLoginInErrorMessage(undefined), 10000);
+        setTimeOut(setTimeout(() => setLoginInErrorMessage(undefined), 10000));
         return;
       }
 
@@ -122,11 +124,12 @@ function SignInAndSignUp(props: Props): ReactElement {
           loginInEmailRef.current.value,
           loginInPasswordRef.current.value,
         );
+        if (timeOut) clearTimeout(timeOut);
         history.replace(from);
       } catch (err: any) {
         setLoginInLoading(false);
         setLoginInErrorMessage(codeToString(err.code.split("/")[1]));
-        setTimeout(() => setLoginInErrorMessage(undefined), 10000);
+        setTimeOut(setTimeout(() => setLoginInErrorMessage(undefined), 10000));
       }
     }
   };
@@ -142,7 +145,7 @@ function SignInAndSignUp(props: Props): ReactElement {
       // Display name check
       if (loginUpDisplayNameRef.current.value.length > 30) {
         setLoginUpErrorMessage("Display name must less than 30 characters");
-        setTimeout(() => setLoginUpErrorMessage(undefined), 10000);
+        setTimeOut(setTimeout(() => setLoginUpErrorMessage(undefined), 10000));
         return;
       }
 
@@ -154,7 +157,7 @@ function SignInAndSignUp(props: Props): ReactElement {
         )
       ) {
         setLoginUpErrorMessage("First field must be an email");
-        setTimeout(() => setLoginUpErrorMessage(undefined), 10000);
+        setTimeOut(setTimeout(() => setLoginUpErrorMessage(undefined), 10000));
         return;
       }
 
@@ -164,7 +167,7 @@ function SignInAndSignUp(props: Props): ReactElement {
         loginUpConfirmPasswordRef.current.value
       ) {
         setLoginUpErrorMessage("Confirm password does not match");
-        setTimeout(() => setLoginUpErrorMessage(undefined), 10000);
+        setTimeOut(setTimeout(() => setLoginUpErrorMessage(undefined), 10000));
         return;
       }
 
@@ -188,7 +191,7 @@ function SignInAndSignUp(props: Props): ReactElement {
       } catch (err: any) {
         setLoginUpLoading(false);
         setLoginUpErrorMessage(codeToString(err.code.split("/")[1]));
-        setTimeout(() => setLoginUpErrorMessage(undefined), 10000);
+        setTimeOut(setTimeout(() => setLoginUpErrorMessage(undefined), 10000));
       }
     }
   };

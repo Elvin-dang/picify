@@ -17,7 +17,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { connect } from "react-redux";
 import { AppDispatch, RootState } from "../../../../config/store";
@@ -205,7 +204,7 @@ const UpdateAvatarModal = ({
           (newAvatar.type === "image/jpeg" || newAvatar.type === "image/png")
         ) {
           if (newAvatar.size <= 10 * Math.pow(1024, 2)) {
-            const imageRef = ref(storage, `${uid}/avatar/${uuidv4()}`);
+            const imageRef = ref(storage, `${uid}/personal/avatar`);
             const snapshot = await uploadBytes(imageRef, newAvatar);
             const url = await getDownloadURL(snapshot.ref);
 
@@ -227,10 +226,26 @@ const UpdateAvatarModal = ({
         }
       } else {
         if (auth.currentUser) {
-          await updateProfile(auth.currentUser, {
-            photoURL: newAvatar,
-          });
-          dispatch(setUserState({ photoURL: newAvatar }));
+          if (newAvatar) {
+            // from gallery
+            const image = await fetch(newAvatar);
+            const imageBlog = await image.blob();
+
+            const imageRef = ref(storage, `${uid}/personal/avatar`);
+            const snapshot = await uploadBytes(imageRef, imageBlog);
+            const url = await getDownloadURL(snapshot.ref);
+
+            await updateProfile(auth.currentUser, {
+              photoURL: url,
+            });
+            dispatch(setUserState({ photoURL: url }));
+          } else {
+            // null
+            await updateProfile(auth.currentUser, {
+              photoURL: "",
+            });
+            dispatch(setUserState({ photoURL: newAvatar }));
+          }
         }
       }
       setLoading(false);
