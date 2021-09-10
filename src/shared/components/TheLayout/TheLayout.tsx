@@ -1,20 +1,12 @@
 import React, { Suspense } from "react";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { Link, Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import { auth } from "../../../config/firebase";
 import { connect } from "react-redux";
 import { setUserState } from "../../slices/user.slice";
 import routes from "../../../config/routes";
-import {
-  Button,
-  Dropdown,
-  Menu,
-  PageHeader,
-  Row,
-  Spin,
-  Typography,
-} from "antd";
+import { PageHeader, Spin, Typography } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import "./TheLayout.scss";
 import { AppDispatch, RootState } from "../../../config/store";
@@ -25,6 +17,7 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 import TheSideBar from "../TheSideBar/TheSideBar";
+import MenuDropDown from "../MenuDropDown";
 
 interface Props {
   photoURL: string | null;
@@ -65,45 +58,6 @@ const TheLayout = ({ photoURL, dispatch }: Props) => {
     await auth.signOut();
   };
 
-  const menu = (
-    <Menu>
-      <Menu.Item key={1}>
-        <Link to="/profile">
-          <Row gutter={24} align="middle">
-            <ProfileOutlined
-              style={{ marginLeft: "10px", verticalAlign: "baseline" }}
-            />
-            <Button
-              style={{
-                backgroundColor: "transparent",
-                borderColor: "transparent",
-                boxShadow: "none",
-              }}
-            >
-              Profile
-            </Button>
-          </Row>
-        </Link>
-      </Menu.Item>
-      <Menu.Item key={2}>
-        <Row gutter={24} align="middle" onClick={handleLogout}>
-          <LogoutOutlined
-            style={{ marginLeft: "10px", verticalAlign: "baseline" }}
-          />
-          <Button
-            style={{
-              backgroundColor: "transparent",
-              borderColor: "transparent",
-              boxShadow: "none",
-            }}
-          >
-            Log out
-          </Button>
-        </Row>
-      </Menu.Item>
-    </Menu>
-  );
-
   return shouldRender ? (
     <div className="layoutContainer">
       <div className="sideBarWrapper">
@@ -122,19 +76,27 @@ const TheLayout = ({ photoURL, dispatch }: Props) => {
             }
             extra={[
               <div className="extraHeader" key="1">
-                <Dropdown
-                  overlay={menu}
-                  placement="bottomCenter"
-                  arrow
-                  trigger={["click"]}
+                <MenuDropDown
+                  elements={[
+                    {
+                      name: "Profile",
+                      icon: <ProfileOutlined />,
+                      to: "/profile",
+                    },
+                    {
+                      name: "Logout",
+                      icon: <LogoutOutlined />,
+                      click: handleLogout,
+                    },
+                  ]}
                 >
                   <Avatar
                     size="large"
                     src={photoURL}
                     icon={<UserOutlined />}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", margin: 0 }}
                   />
-                </Dropdown>
+                </MenuDropDown>
               </div>,
             ]}
           />

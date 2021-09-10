@@ -21,6 +21,8 @@ import { auth } from "../../config/firebase";
 import { useHistory } from "react-router-dom";
 import { message } from "antd";
 import { codeToString } from "../../utils/string";
+// @ts-ignore
+import Tilt from "react-tilt";
 
 interface Props {}
 
@@ -296,12 +298,36 @@ function SignInAndSignUp(props: Props): ReactElement {
             </div>
 
             <div className="login__social">
-              <button className="login__social-icon">
-                <FacebookFilled />
-              </button>
-              <button className="login__social-icon google">
-                <GoogleCircleFilled />
-              </button>
+              <div style={{ display: "inline-block" }}>
+                <Tilt
+                  options={{
+                    max: 35,
+                    perspective: 1000,
+                    scale: 1.5,
+                    speed: 1000,
+                    transition: true,
+                  }}
+                >
+                  <button className="login__social-icon">
+                    <FacebookFilled />
+                  </button>
+                </Tilt>
+              </div>
+              <div style={{ display: "inline-block" }}>
+                <Tilt
+                  options={{
+                    max: 35,
+                    perspective: 1000,
+                    scale: 1.5,
+                    speed: 1000,
+                    transition: true,
+                  }}
+                >
+                  <button className="login__social-icon google">
+                    <GoogleCircleFilled />
+                  </button>
+                </Tilt>
+              </div>
             </div>
           </form>
 
