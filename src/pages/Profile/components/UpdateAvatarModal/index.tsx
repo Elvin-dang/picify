@@ -20,7 +20,7 @@ import React, {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { connect } from "react-redux";
 import { AppDispatch, RootState } from "../../../../config/store";
-import ConfirmModal from "../../../../shared/components/ConfirmModal/ConfirmModal";
+import ConfirmModal from "../../../../shared/components/ConfirmModal";
 import { PicturesType } from "../../../Picture/Picture.slice";
 import "./styles.scss";
 import { auth, storage } from "../../../../config/firebase";

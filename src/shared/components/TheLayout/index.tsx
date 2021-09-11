@@ -8,7 +8,7 @@ import { setUserState } from "../../slices/user.slice";
 import routes from "../../../config/routes";
 import { PageHeader, Spin, Typography } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
-import "./TheLayout.scss";
+import "./styles.scss";
 import { AppDispatch, RootState } from "../../../config/store";
 import {
   LogoutOutlined,
@@ -16,7 +16,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
-import TheSideBar from "../TheSideBar/TheSideBar";
+import TheSideBar from "../TheSideBar";
 import MenuDropDown from "../MenuDropDown";
 
 interface Props {

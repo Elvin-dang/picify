@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import ConfirmModal from "../../../../shared/components/ConfirmModal/ConfirmModal";
+import ConfirmModal from "../../../../shared/components/ConfirmModal";
 import "./styles.scss";
 import Input from "../../../../shared/components/Input";
 import { CheckOutlined, LoadingOutlined } from "@ant-design/icons";

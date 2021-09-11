@@ -4,7 +4,7 @@ import {
   InfoCircleOutlined,
 } from "@ant-design/icons";
 import React, { ChangeEvent } from "react";
-import "./UploadBox.scss";
+import "./styles.scss";
 import { useRef } from "react";
 import { Tooltip } from "antd";
 

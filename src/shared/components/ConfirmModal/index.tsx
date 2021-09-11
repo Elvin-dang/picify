@@ -1,5 +1,5 @@
 import React, { CSSProperties, ReactNode } from "react";
-import "./ConfirmModal.scss";
+import "./styles.scss";
 import { Modal } from "antd";
 
 interface Props {

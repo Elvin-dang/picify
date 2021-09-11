@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { RootState } from "../../../config/store";
 import { useWindowSize } from "../../customHooks";
-import "./TheSideBar.scss";
+import "./styles.scss";
 
 interface Props {
   photoURL: string | null;

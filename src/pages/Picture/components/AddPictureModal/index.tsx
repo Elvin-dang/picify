@@ -7,11 +7,11 @@ import { message, Progress } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { AppDispatch, RootState } from "../../../../config/store";
-import ConfirmModal from "../../../../shared/components/ConfirmModal/ConfirmModal";
+import ConfirmModal from "@shared/components/ConfirmModal";
 import { addPictureAsyncAction, PicturesType } from "../../Picture.slice";
-import UploadBox from "../UploadBox/UploadBox";
-import "./AddPictureModal.scss";
+import UploadBox from "../UploadBox";
+import "./styles.scss";
+import { AppDispatch, RootState } from "@config/store";
 
 interface Props {
   uid: string;

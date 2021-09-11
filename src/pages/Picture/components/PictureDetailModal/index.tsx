@@ -1,6 +1,6 @@
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import React from "react";
-import "./PictureDetailModal.scss";
+import "./styles.scss";
 import { useRef } from "react";
 import { PicturesType } from "../../Picture.slice";
 

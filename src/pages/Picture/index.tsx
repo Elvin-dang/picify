@@ -12,10 +12,10 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { AppDispatch, RootState } from "../../config/store";
-import ConfirmModal from "../../shared/components/ConfirmModal/ConfirmModal";
+import ConfirmModal from "../../shared/components/ConfirmModal";
 import { toTimeString } from "../../utils/time";
-import AddPictureModal from "./components/AddPictureModal/AddPictureModal";
-import PictureDetailModal from "./components/PictureDetailModal/PictureDetailModal";
+import AddPictureModal from "./components/AddPictureModal";
+import PictureDetailModal from "./components/PictureDetailModal";
 import "./styles.scss";
 import {
   deletePictureAsyncAction,
