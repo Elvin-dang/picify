@@ -8,7 +8,7 @@ import Modal from "antd/lib/modal/Modal";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import ConfirmModal from "@shared/components/ConfirmModal";
-import { addPictureAsyncAction, PicturesType } from "../../Picture.slice";
+import { addPictureAsyncAction, PictureType } from "../../Picture.slice";
 import UploadBox from "../UploadBox";
 import "./styles.scss";
 import { AppDispatch, RootState } from "@config/store";
@@ -18,7 +18,7 @@ interface Props {
   open: boolean;
   uploadingPicture: string;
   uploadProgress: number;
-  pictures: PicturesType[];
+  pictures: PictureType[];
   handleCancel: () => void;
   dispatch: AppDispatch;
 }
