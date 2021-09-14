@@ -14,6 +14,7 @@ import "./styles.scss";
 import { getVideoAsyncAction, VideoType } from "./Video.slice";
 import { kontext } from "./kontext";
 import { toTimeString } from "@utils/time";
+import { byteToString } from "@utils/string";
 
 interface Props {
   uid: string;
@@ -31,8 +32,11 @@ const Video = ({
   deletingVideo,
 }: Props) => {
   const [openAddVideoModal, setOpenAddVideoModal] = useState<boolean>(false);
+  const [selectedVideo, setSelectedVideo] = useState<VideoType>();
+
   const ref = useRef<HTMLDivElement>(null);
   const contextRef = useRef<any>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     dispatch(getVideoAsyncAction(uid));
@@ -113,6 +117,7 @@ const Video = ({
                   <PlayCircleFilled
                     onClick={() => {
                       contextRef.current.show(1);
+                      setSelectedVideo(video);
                     }}
                   />
                 </div>
@@ -141,7 +146,7 @@ const Video = ({
         <div className="videoContentWrapper">
           <div className="videoContent">
             {videos.length > 0 ? (
-              <video src={videos[0].url} controls></video>
+              <video src={selectedVideo?.url} controls ref={videoRef}></video>
             ) : undefined}
           </div>
           <div className="videoInfo">
@@ -150,6 +155,9 @@ const Video = ({
                 <RollbackOutlined
                   onClick={() => {
                     contextRef.current.show(0);
+                    if (videoRef.current) {
+                      videoRef.current.pause();
+                    }
                   }}
                 />
               </div>
@@ -161,23 +169,25 @@ const Video = ({
             <div className="info">
               <div className="title">
                 <PlaySquareFilled />
-                Title
+                {selectedVideo?.name}
               </div>
               <div className="detail">
                 <div className="label">Name</div>
-                <div className="text">Name</div>
+                <div className="text">{selectedVideo?.name}</div>
               </div>
               <div className="detail">
                 <div className="label">Size</div>
-                <div className="text">3.5MB</div>
+                <div className="text">{byteToString(selectedVideo?.size)}</div>
               </div>
               <div className="detail">
                 <div className="label">Type</div>
-                <div className="text">video/mp4</div>
+                <div className="text">{selectedVideo?.contentType}</div>
               </div>
               <div className="detail">
                 <div className="label">Create</div>
-                <div className="text">12/12/2021</div>
+                <div className="text">
+                  {toTimeString(selectedVideo?.createAt)}
+                </div>
               </div>
               <div className="detail">
                 <div className="label">Description</div>
