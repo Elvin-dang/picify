@@ -235,8 +235,9 @@
         // Use for button skeleton
         & div {
           flex: 1 1 auto;
-          margin: 0.5rem;
+          margin-top: 1rem;
           min-width: 30%;
+          padding: 0.5rem;
 
           & span {
             width: 100%;

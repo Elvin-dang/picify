@@ -38,17 +38,329 @@
 
     &.one {
       .actionWrapper {
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
         padding: 1rem;
         display: flex;
         justify-content: space-around;
+
+        $bg: #fff;
+        $text: #382b22;
+        $light-pink: #fff0f0;
+        $pink: #ffe9e9;
+        $dark-pink: #f9c4d2;
+        $pink-border: #b18597;
+        $pink-shadow: #fff1f121;
+
+        .ant-skeleton-button {
+          border-radius: 20px;
+        }
+
+        button {
+          position: relative;
+          display: inline-block;
+          cursor: pointer;
+          outline: none;
+          border: 0;
+          vertical-align: middle;
+          text-decoration: none;
+          font-size: inherit;
+          font-family: inherit;
+
+          &.push {
+            font-weight: 600;
+            color: $text;
+            text-transform: uppercase;
+            padding: 0.5em 1em;
+            background: $light-pink;
+            border: 2px solid $pink-border;
+            border-radius: 0.75em;
+            transform-style: preserve-3d;
+            transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+              background 150ms cubic-bezier(0, 0, 0.58, 1);
+
+            &::before {
+              position: absolute;
+              content: "";
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background: $dark-pink;
+              border-radius: inherit;
+              box-shadow: 0 0 0 2px $pink-border, 0 0.625em 0 0 $pink-shadow;
+              transform: translate3d(0, 0.75em, -1em);
+              transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+                box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+            }
+
+            &:hover {
+              background: $pink;
+              transform: translate(0, 0.25em);
+
+              &::before {
+                box-shadow: 0 0 0 2px $pink-border, 0 0.5em 0 0 $pink-shadow;
+                transform: translate3d(0, 0.5em, -1em);
+              }
+            }
+
+            &:active {
+              background: $pink;
+              transform: translate(0em, 0.75em);
+
+              &::before {
+                box-shadow: 0 0 0 2px $pink-border, 0 0 $pink-shadow;
+                transform: translate3d(0, 0, -1em);
+              }
+            }
+          }
+        }
+      }
+
+      .videoArea {
+        --spacing: 1rem;
+        --columns: 1;
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: calc(-1 * var(--spacing));
+
+        & .videoCard.skeleton {
+          display: none;
+          width: calc(calc(100% / 1) - var(--spacing));
+
+          &:nth-child(1) {
+            display: flex;
+          }
+        }
+
+        .empty {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 30vh;
+
+          & .ant-empty .ant-empty-image img {
+            margin: 0 auto;
+          }
+
+          & .emptyDescription {
+            color: white;
+            font-family: "Open Sans Condensed", sans-serif;
+            font-weight: 800;
+            line-height: 3rem;
+            font-size: 3rem;
+          }
+        }
+
+        .videoCard {
+          display: flex;
+          flex-direction: column;
+          width: calc(calc(100% / var(--columns)) - var(--spacing));
+          border-radius: 20px;
+          text-align: center;
+          margin-left: var(--spacing);
+          margin-bottom: var(--spacing);
+          background-color: whitesmoke;
+          transition: 0.3s;
+          backface-visibility: hidden;
+          position: relative;
+          overflow: hidden;
+
+          --scale: 1.1;
+
+          &:hover {
+            transform: scale(var(--scale), var(--scale));
+            z-index: 2;
+
+            & .videoThumbnail {
+              opacity: 1;
+            }
+          }
+
+          video {
+            border-radius: 20px 20px 0 0;
+            height: 200px;
+            overflow: hidden;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+          }
+
+          .videoThumbnail {
+            position: absolute;
+            height: 200px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            backface-visibility: hidden;
+            background: rgba(92, 92, 92, 0.178);
+            border-radius: 20px 20px 0 0;
+
+            span {
+              cursor: pointer;
+              font-size: 5rem;
+              transition: 0.5s ease;
+              color: rgba($color: #fff, $alpha: 0.5);
+
+              &:hover {
+                transform: scale(1.3, 1.3) rotate(360deg);
+                color: whitesmoke;
+              }
+            }
+          }
+
+          .videoCardFooter {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+            .name {
+              font-weight: bolder;
+              font-size: 1.5rem;
+              padding: 0 1rem 1rem 1rem;
+              text-align: start;
+            }
+
+            .descriptionWrapper {
+              margin-top: auto;
+              padding: 1rem 1rem;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              border-top: 1px solid rgba(0, 0, 0, 0.151);
+
+              .create {
+                font-weight: lighter;
+                font-size: 1.3rem;
+              }
+
+              .duration {
+                display: inline-block;
+                background: rgba(24, 24, 24, 0.637);
+                color: white;
+                font-weight: 700;
+                font-size: 1.3rem;
+                padding: 0.5rem 1rem;
+                border-radius: 10px;
+              }
+
+              // Use for skeleton
+              .ant-skeleton:nth-child(1) {
+                width: 70%;
+
+                span {
+                  border-radius: 1rem;
+                }
+              }
+
+              .ant-skeleton:nth-child(2) {
+                width: 25%;
+
+                span {
+                  border-radius: 1rem;
+                }
+              }
+            }
+
+            > .ant-skeleton {
+              border-radius: 1rem;
+              padding: 1rem;
+              span {
+                border-radius: 1rem;
+              }
+            }
+          }
+
+          // Use for image skeleton
+          & > div {
+            width: 100%;
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+
+            & .ant-skeleton-image {
+              width: 100%;
+            }
+          }
+        }
+      }
+
+      @include Responsive(SM) {
+        .videoArea {
+          --columns: 2;
+
+          & .videoCard {
+            --scale: 1.125;
+
+            &.skeleton {
+              width: calc(calc(100% / 2) - var(--spacing));
+
+              &:nth-child(2) {
+                display: flex;
+              }
+            }
+          }
+        }
+      }
+
+      @include Responsive(MD) {
+        .videoArea {
+          --columns: 3;
+
+          & .videoCard {
+            --scale: 1.15;
+
+            &.skeleton {
+              width: calc(calc(100% / 3) - var(--spacing));
+
+              &:nth-child(3) {
+                display: flex;
+              }
+            }
+          }
+        }
+      }
+
+      @include Responsive(XL) {
+        .videoArea {
+          --columns: 4;
+
+          & .videoCard {
+            --scale: 1.175;
+
+            &.skeleton {
+              width: calc(calc(100% / 4) - var(--spacing));
+
+              &:nth-child(4) {
+                display: flex;
+              }
+            }
+          }
+        }
+      }
+
+      @include Responsive(XXL) {
+        .videoArea {
+          --columns: 5;
+
+          & .videoCard {
+            --scale: 1.2;
+          }
+        }
       }
     }
 
     &.two {
       padding: 2rem 1rem;
+      font-family: "Montserrat";
 
-      .videoArea {
+      .videoContentWrapper {
         display: flex;
         flex-wrap: wrap;
         align-items: stretch;
@@ -79,18 +391,102 @@
           min-height: 200px;
           position: relative;
 
-          > div {
+          .action {
+            margin: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .back {
+              span {
+                font-size: 1.5rem;
+                border-radius: 50%;
+                background-color: rgba(48, 48, 48, 0.205);
+                height: 30px;
+                width: 30px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: 0.5s;
+
+                &:hover {
+                  background-color: rgba(32, 32, 32, 0.459);
+                  color: white;
+                  transform: scale(1.2, 1.2) rotate(-360deg);
+                }
+              }
+            }
+
+            .das {
+              display: flex;
+
+              span {
+                font-size: 1.5rem;
+                border-radius: 50%;
+                background-color: rgba(48, 48, 48, 0.205);
+                height: 30px;
+                width: 30px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: 0.5s;
+
+                &:hover {
+                  background-color: rgba(32, 32, 32, 0.459);
+                  color: white;
+                  transform: scale(1.2, 1.2) rotate(-360deg);
+                }
+
+                &:nth-child(2) {
+                  margin-left: 1rem;
+                }
+              }
+            }
+          }
+
+          .info {
             position: absolute;
-            top: 0;
+            top: 40px;
             left: 0;
             right: 0;
             bottom: 0;
             max-height: 100%;
             margin: 20px;
-            overflow: scroll;
+            word-wrap: break-word;
+            overflow-y: scroll;
+            color: black;
 
             &::-webkit-scrollbar {
               display: none;
+            }
+
+            .title {
+              font-size: 2.5rem;
+              margin-bottom: 2rem;
+
+              span {
+                margin-right: 1rem;
+
+                svg {
+                  border-radius: 10px;
+                }
+              }
+            }
+
+            .detail {
+              margin-bottom: 1rem;
+
+              .label {
+                font-size: 1.3rem;
+                line-height: 1.5rem;
+                color: rgb(128, 128, 128);
+              }
+
+              .text {
+                font-size: 1.8rem;
+                line-height: 2rem;
+                color: rgb(44, 44, 44);
+              }
             }
           }
         }
@@ -324,37 +720,5 @@
         visibility: hidden;
       }
     }
-  }
-
-  .bullets {
-    position: absolute;
-    width: 100%;
-    bottom: 20px;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-  }
-
-  .bullets li {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    margin: 0 3px;
-
-    background: rgba(255, 255, 255, 0.5);
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  }
-
-  .bullets li:hover {
-    background: rgba(255, 255, 255, 0.8);
-  }
-
-  .bullets li.active {
-    cursor: default;
-    background: #fff;
   }
 }
