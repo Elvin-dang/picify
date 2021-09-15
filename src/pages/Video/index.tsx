@@ -1,22 +1,29 @@
 import {
   DeleteFilled,
+  DeleteOutlined,
   DownloadOutlined,
   LinkOutlined,
+  LoadingOutlined,
   PlayCircleFilled,
   PlaySquareFilled,
   RollbackOutlined,
   VideoCameraAddOutlined,
 } from "@ant-design/icons";
 import { AppDispatch, RootState } from "@config/store";
-import { Empty, Skeleton } from "antd";
+import { Empty, message, Skeleton } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import "./styles.scss";
-import { getVideoAsyncAction, VideoType } from "./Video.slice";
+import {
+  deleteVideoAsyncAction,
+  getVideoAsyncAction,
+  VideoType,
+} from "./Video.slice";
 import { kontext } from "./kontext";
-import { toTimeString } from "@utils/time";
+import { toDurationString, toTimeString } from "@utils/time";
 import { byteToString } from "@utils/string";
 import AddVideoModal from "./components/AddVideoModal";
+import ConfirmModal from "@shared/components/ConfirmModal";
 
 interface Props {
   uid: string;
@@ -34,6 +41,8 @@ const Video = ({
   deletingVideo,
 }: Props) => {
   const [openAddVideoModal, setOpenAddVideoModal] = useState<boolean>(false);
+  const [openDeleteConfirmModal, setOpenDeleteConfirmModal] =
+    useState<boolean>(false);
   const [selectedVideo, setSelectedVideo] = useState<VideoType>();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -45,10 +54,39 @@ const Video = ({
   }, [dispatch, uid]);
 
   useEffect(() => {
+    if (deletingVideo === "complete") {
+      setSelectedVideo(undefined);
+      setOpenDeleteConfirmModal(false);
+    }
+  }, [deletingVideo]);
+
+  useEffect(() => {
     if (ref.current) {
       contextRef.current = kontext(ref.current);
     }
   }, []);
+
+  const copyToClipboard = (value?: string) => {
+    navigator.clipboard.writeText(value ? value : "");
+    message.success("Copied !!");
+  };
+
+  const downloadVideo = async (video?: VideoType) => {
+    if (video) {
+      const item = await fetch(video.url);
+      const itemBlog = await item.blob();
+      const itemURL = URL.createObjectURL(itemBlog);
+
+      const link = document.createElement("a");
+      link.href = itemURL;
+      link.download = video.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      message.error("Download Video Fail");
+    }
+  };
 
   return (
     <div className="videoContainer" ref={ref}>
@@ -112,7 +150,7 @@ const Video = ({
               </div>
             </>
           ) : videos.length > 0 ? (
-            videos.map((video, index) => (
+            videos.map((video) => (
               <div className="videoCard" key={video.name}>
                 <video src={video.url}></video>
                 <div className="videoThumbnail">
@@ -124,13 +162,20 @@ const Video = ({
                   />
                 </div>
                 <button className="delete">
-                  <DeleteFilled />
+                  <DeleteFilled
+                    onClick={() => {
+                      setSelectedVideo(video);
+                      setOpenDeleteConfirmModal(true);
+                    }}
+                  />
                 </button>
                 <div className="videoCardFooter">
                   <div className="name">{video.name}</div>
                   <div className="descriptionWrapper">
                     <div className="create">{toTimeString(video.createAt)}</div>
-                    <div className="duration">04:50</div>
+                    <div className="duration">
+                      {toDurationString(video.duration)}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -167,8 +212,12 @@ const Video = ({
                 />
               </div>
               <div className="das">
-                <LinkOutlined />
-                <DownloadOutlined />
+                <LinkOutlined
+                  onClick={() => copyToClipboard(selectedVideo?.url)}
+                />
+                <DownloadOutlined
+                  onClick={() => downloadVideo(selectedVideo)}
+                />
               </div>
             </div>
             <div className="info">
@@ -197,10 +246,11 @@ const Video = ({
               <div className="detail">
                 <div className="label">Description</div>
                 <div className="text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae
-                  iste a necessitatibus deleniti odio nesciunt tempore in facere
-                  doloribus sint. Natus labore, aliquid quisquam ea ad modi
-                  repudiandae recusandae odit.
+                  {selectedVideo?.description !== "" ? (
+                    selectedVideo?.description
+                  ) : (
+                    <span style={{ color: "orange" }}>None</span>
+                  )}
                 </div>
               </div>
             </div>
@@ -211,6 +261,35 @@ const Video = ({
         open={openAddVideoModal}
         handleCancel={() => setOpenAddVideoModal(false)}
       />
+      <ConfirmModal
+        open={openDeleteConfirmModal}
+        onCancel={() => setOpenDeleteConfirmModal(false)}
+        moreInfo={"Delete perpetually and can not be reverted"}
+        theme="red"
+        icon={<DeleteOutlined />}
+        confirmButton={
+          <button
+            onClick={() =>
+              dispatch(
+                deleteVideoAsyncAction({
+                  uid,
+                  videoName: selectedVideo ? selectedVideo.name : undefined,
+                }),
+              )
+            }
+          >
+            {deletingVideo === "deleting" ? (
+              <LoadingOutlined />
+            ) : (
+              <DeleteOutlined />
+            )}{" "}
+            Delete
+          </button>
+        }
+      >
+        Are you sure to delete "{selectedVideo ? selectedVideo.name : undefined}
+        " ?
+      </ConfirmModal>
     </div>
   );
 };

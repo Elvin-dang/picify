@@ -1,9 +1,13 @@
-import { WarningOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  UploadOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 import { AppDispatch, RootState } from "@config/store";
-import { VideoType } from "@pages/Video/Video.slice";
+import { addVideoAsyncAction, VideoType } from "@pages/Video/Video.slice";
 import ConfirmModal from "@shared/components/ConfirmModal";
-import { message, Modal } from "antd";
-import React, { useEffect, useState } from "react";
+import { message, Modal, Progress } from "antd";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import UploadBox from "../UploadBox";
 import "./styles.scss";
@@ -29,15 +33,19 @@ const AddVideoModal = ({
 }: Props) => {
   const [video, setVideo] = useState<File>();
   const [customName, setCustomName] = useState<string>();
+  const [description, setDescription] = useState<string>();
   const [previewVideo, setPreviewVideo] = useState<string>();
   const [videoName, setVideoName] = useState<string>();
   const [openWaringModal, setOpenWarningModel] = useState<boolean>(false);
   const [isDuplicateName, setIsDuplicateName] = useState<boolean>(false);
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   useEffect(() => {
     if (uploadingVideo === "complete") {
       setVideo(undefined);
       setCustomName(undefined);
+      setDescription(undefined);
       setIsDuplicateName(false);
       setPreviewVideo(undefined);
       setVideoName(undefined);
@@ -54,20 +62,31 @@ const AddVideoModal = ({
       setIsDuplicateName(false);
     }
   };
+  const handleSetDescription = (value: string) => setDescription(value);
   const handleSetPreviewVideo = (value: string) => setPreviewVideo(value);
   const handleSetVideoName = (value: string) => setVideoName(value);
 
   const handleUpload = () => {
-    if (video && (video.type === "video/jpeg" || video.type === "video/png")) {
+    if (video && (video.type === "video/mp4" || video.type === "video/x-m4v")) {
       if (video.size <= 50 * Math.pow(1024, 2)) {
         if (
-          videos.findIndex((video) =>
-            customName ? video.name === customName : video.name === video.name,
+          videos.findIndex((videoItem) =>
+            customName
+              ? videoItem.name === customName
+              : videoItem.name === video.name,
           ) > -1
         ) {
           setOpenWarningModel(true);
         } else {
-          // dispatch(addPictureAsyncAction({ uid, video, customName }));
+          dispatch(
+            addVideoAsyncAction({
+              uid,
+              video,
+              customName,
+              description,
+              duration: videoRef.current?.duration,
+            }),
+          );
         }
       } else {
         message.error("Video size must be smaller than 50MB");
@@ -80,7 +99,15 @@ const AddVideoModal = ({
   };
 
   const forceUpload = () => {
-    // dispatch(addPictureAsyncAction({ uid, video, customName }));
+    dispatch(
+      addVideoAsyncAction({
+        uid,
+        video,
+        customName,
+        description,
+        duration: videoRef.current?.duration,
+      }),
+    );
     setOpenWarningModel(false);
   };
 
@@ -100,22 +127,45 @@ const AddVideoModal = ({
             isDuplicateName={isDuplicateName}
             handleSetVideo={handleSetVideo}
             handleSetCustomName={handleSetCustomName}
+            handleSetDescription={handleSetDescription}
             handleSetPreviewVideo={handleSetPreviewVideo}
             handleSetVideoName={handleSetVideoName}
+            videoRef={videoRef}
           />
         </div>
+        <div className="addVideoModalActionArea">
+          {uploadingVideo === "uploading" ? (
+            <Progress
+              status={uploadProgress === 100 ? undefined : "active"}
+              percent={uploadProgress}
+            />
+          ) : (
+            <>
+              <button
+                id="uploadBtn"
+                onClick={handleUpload}
+                disabled={video ? false : true}
+              >
+                <UploadOutlined /> Upload
+              </button>
+              <button id="cancelBtn" onClick={handleCancel}>
+                <CloseOutlined /> Cancel
+              </button>
+            </>
+          )}
+        </div>
+        <ConfirmModal
+          open={openWaringModal}
+          onCancel={() => setOpenWarningModel(false)}
+          moreInfo={
+            "Keep uploading will overwrite the video which has the same name"
+          }
+          confirmButton={<button onClick={forceUpload}>Accept</button>}
+          icon={<WarningOutlined />}
+        >
+          Video has been duplicate name. Are you sure to continue ?
+        </ConfirmModal>
       </div>
-      <ConfirmModal
-        open={openWaringModal}
-        onCancel={() => setOpenWarningModel(false)}
-        moreInfo={
-          "Keep uploading will overwrite the picture which has the same name"
-        }
-        confirmButton={<button onClick={forceUpload}>Accept</button>}
-        icon={<WarningOutlined />}
-      >
-        Video has been duplicate name. Are you sure to continue ?
-      </ConfirmModal>
     </Modal>
   );
 };

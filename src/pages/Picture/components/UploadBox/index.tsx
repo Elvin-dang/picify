@@ -48,9 +48,9 @@ const UploadBox = ({
   };
 
   const handleRemoveImage = () => {
+    if (ref.current) ref.current.value = "";
     handleSetPreviewImage(undefined);
     handleSetImage(undefined);
-
     handleSetImageName(undefined);
     handleSetCustomName(undefined);
   };

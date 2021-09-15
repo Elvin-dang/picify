@@ -8,14 +8,16 @@ import Spinner from "../../shared/components/Spinner";
 import { CameraOutlined, FormOutlined } from "@ant-design/icons";
 import UpdateProfileModal from "./components/UpdateProfileModal";
 import UpdateAvatarModal from "./components/UpdateAvatarModal";
+import { getVideoAsyncAction, VideoState } from "@pages/Video/Video.slice";
 
 interface Props {
   user: UserState;
   picture: PictureState;
+  video: VideoState;
   dispatch: AppDispatch;
 }
 
-const Profile = ({ user, picture, dispatch }: Props) => {
+const Profile = ({ user, picture, video, dispatch }: Props) => {
   const [openEditProfileModal, setOpenEditProfileModal] =
     useState<boolean>(false);
   const [openEditAvatarModal, setOpenEditAvatarModal] =
@@ -23,11 +25,18 @@ const Profile = ({ user, picture, dispatch }: Props) => {
 
   useEffect(() => {
     dispatch(getPictureAsyncAction(user.uid));
+    dispatch(getVideoAsyncAction(user.uid));
   }, [dispatch, user.uid]);
 
   const pictureUsagePercentage = () => {
     let total = 0;
     picture.pictures.forEach((picture) => (total += picture.size));
+    return total / Math.pow(1024, 2);
+  };
+
+  const videoUsagePercentage = () => {
+    let total = 0;
+    video.videos.forEach((videoItem) => (total += videoItem.size));
     return total / Math.pow(1024, 2);
   };
 
@@ -62,7 +71,7 @@ const Profile = ({ user, picture, dispatch }: Props) => {
           <div className="tag">Free</div>
         </div>
       </div>
-      {picture.fetchingPicture ? (
+      {picture.fetchingPicture && video.fetchingVideo ? (
         <div
           style={{
             display: "flex",
@@ -91,10 +100,19 @@ const Profile = ({ user, picture, dispatch }: Props) => {
                   {pictureUsagePercentage().toFixed(2)}MB
                 </div>
               </div>
-              <div className="box video">
+              <div
+                className="box video"
+                style={
+                  {
+                    "--progress": `${(videoUsagePercentage() / 50) * 100}%`,
+                  } as any
+                }
+              >
                 <div className="title">Video</div>
-                <div className="number">0</div>
-                <div className="progress">0MB</div>
+                <div className="number">{video.videos.length}</div>
+                <div className="progress">
+                  {videoUsagePercentage().toFixed(2)}MB
+                </div>
               </div>
             </div>
             <div className="action">
@@ -115,7 +133,8 @@ const Profile = ({ user, picture, dispatch }: Props) => {
   );
 };
 
-export default connect(({ user, picture }: RootState) => ({
+export default connect(({ user, picture, video }: RootState) => ({
   user,
   picture,
+  video,
 }))(Profile);

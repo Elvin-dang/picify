@@ -3,7 +3,7 @@ import {
   CloudUploadOutlined,
   InfoCircleOutlined,
 } from "@ant-design/icons";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, LegacyRef } from "react";
 import "./styles.scss";
 import { useRef } from "react";
 import { Tooltip } from "antd";
@@ -14,8 +14,10 @@ interface Props {
   isDuplicateName: boolean;
   handleSetVideo: Function;
   handleSetCustomName: Function;
+  handleSetDescription: Function;
   handleSetPreviewVideo: Function;
   handleSetVideoName: Function;
+  videoRef: LegacyRef<HTMLVideoElement>;
 }
 
 //eslint-disable-next-line
@@ -27,8 +29,10 @@ const UploadBox = ({
   isDuplicateName,
   handleSetVideo,
   handleSetCustomName,
+  handleSetDescription,
   handleSetPreviewVideo,
   handleSetVideoName,
+  videoRef,
 }: Props) => {
   const ref = useRef<HTMLInputElement>(null);
 
@@ -47,19 +51,26 @@ const UploadBox = ({
     handleSetCustomName(e.target.value);
   };
 
+  const handleChangeDescription = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    handleSetDescription(e.target.value);
+  };
+
   const handleRemoveVideo = () => {
+    if (ref.current) ref.current.value = "";
     handleSetPreviewVideo(undefined);
     handleSetVideo(undefined);
-
     handleSetVideoName(undefined);
     handleSetCustomName(undefined);
+    handleSetDescription(undefined);
   };
 
   return (
     <div className="UBContainer">
       <div className={previewVideo ? "UBWrapper active" : "UBWrapper"}>
         <div className="UBVideo">
-          {previewVideo ? <video src={previewVideo} /> : null}
+          {previewVideo ? (
+            <video src={previewVideo} controls ref={videoRef} />
+          ) : null}
         </div>
         <div className="UBContent">
           <div className="UBIcon">
@@ -81,19 +92,29 @@ const UploadBox = ({
         accept="video/mp4,video/x-m4v,video/*"
       />
       {previewVideo ? (
-        <div
-          className={isDuplicateName ? "InputContainer show" : "InputContainer"}
-        >
-          <input
-            type="text"
-            id="UBNameInput"
-            onChange={handleChangeText}
-            placeholder="Video custom name"
-          />
-          <Tooltip color="red" title="Duplicate name">
-            <InfoCircleOutlined />
-          </Tooltip>
-        </div>
+        <>
+          <div
+            className={
+              isDuplicateName ? "InputContainer show" : "InputContainer"
+            }
+          >
+            <input
+              type="text"
+              id="UBNameInput"
+              onChange={handleChangeText}
+              placeholder="Video custom name"
+            />
+            <Tooltip color="red" title="Duplicate name">
+              <InfoCircleOutlined />
+            </Tooltip>
+            <textarea
+              id="UBDescriptionInput"
+              rows={5}
+              placeholder="Video description"
+              onChange={handleChangeDescription}
+            />
+          </div>
+        </>
       ) : null}
       <button id="UBCustomButton" onClick={() => ref.current?.click()}>
         Choose a video
