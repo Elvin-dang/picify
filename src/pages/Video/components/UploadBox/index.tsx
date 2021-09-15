@@ -9,37 +9,37 @@ import { useRef } from "react";
 import { Tooltip } from "antd";
 
 interface Props {
-  previewImage?: string;
-  imageName?: string;
+  previewVideo?: string;
+  videoName?: string;
   isDuplicateName: boolean;
-  handleSetImage: Function;
+  handleSetVideo: Function;
   handleSetCustomName: Function;
-  handleSetPreviewImage: Function;
-  handleSetImageName: Function;
+  handleSetPreviewVideo: Function;
+  handleSetVideoName: Function;
 }
 
 //eslint-disable-next-line
 let regExp = /[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
 
 const UploadBox = ({
-  previewImage,
-  imageName,
+  previewVideo,
+  videoName,
   isDuplicateName,
-  handleSetImage,
+  handleSetVideo,
   handleSetCustomName,
-  handleSetPreviewImage,
-  handleSetImageName,
+  handleSetPreviewVideo,
+  handleSetVideoName,
 }: Props) => {
   const ref = useRef<HTMLInputElement>(null);
 
-  const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeVideo = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      handleSetImage(e.target.files[0]);
-      handleSetPreviewImage(URL.createObjectURL(e.target.files[0]));
+      handleSetVideo(e.target.files[0]);
+      handleSetPreviewVideo(URL.createObjectURL(e.target.files[0]));
     }
     if (e.target.value) {
       const value = e.target.value.match(regExp);
-      if (value) handleSetImageName(value[0]);
+      if (value) handleSetVideoName(value[0]);
     }
   };
 
@@ -47,40 +47,40 @@ const UploadBox = ({
     handleSetCustomName(e.target.value);
   };
 
-  const handleRemoveImage = () => {
-    handleSetPreviewImage(undefined);
-    handleSetImage(undefined);
+  const handleRemoveVideo = () => {
+    handleSetPreviewVideo(undefined);
+    handleSetVideo(undefined);
 
-    handleSetImageName(undefined);
+    handleSetVideoName(undefined);
     handleSetCustomName(undefined);
   };
 
   return (
     <div className="UBContainer">
-      <div className={previewImage ? "UBWrapper active" : "UBWrapper"}>
-        <div className="UBImage">
-          {previewImage ? <img src={previewImage} alt="" /> : null}
+      <div className={previewVideo ? "UBWrapper active" : "UBWrapper"}>
+        <div className="UBVideo">
+          {previewVideo ? <video src={previewVideo} /> : null}
         </div>
         <div className="UBContent">
           <div className="UBIcon">
             <CloudUploadOutlined />
           </div>
-          <div className="UBText">No image chosen, yet!</div>
+          <div className="UBText">No video chosen, yet!</div>
         </div>
-        <div id="UBCancelButton" onClick={handleRemoveImage}>
+        <div id="UBCancelButton" onClick={handleRemoveVideo}>
           <CloseCircleOutlined />
         </div>
-        <div className="UBFileName">{imageName}</div>
+        <div className="UBFileName">{videoName}</div>
       </div>
       <input
         type="file"
         id="UBDefaultButton"
         hidden
-        onChange={handleChangeImage}
+        onChange={handleChangeVideo}
         ref={ref}
-        accept="image/png, image/jpeg"
+        accept="video/mp4,video/x-m4v,video/*"
       />
-      {previewImage ? (
+      {previewVideo ? (
         <div
           className={isDuplicateName ? "InputContainer show" : "InputContainer"}
         >
@@ -88,7 +88,7 @@ const UploadBox = ({
             type="text"
             id="UBNameInput"
             onChange={handleChangeText}
-            placeholder="Image custom name"
+            placeholder="Video custom name"
           />
           <Tooltip color="red" title="Duplicate name">
             <InfoCircleOutlined />
@@ -96,7 +96,7 @@ const UploadBox = ({
         </div>
       ) : null}
       <button id="UBCustomButton" onClick={() => ref.current?.click()}>
-        Choose a image
+        Choose a video
       </button>
     </div>
   );

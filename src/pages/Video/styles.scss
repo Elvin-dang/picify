@@ -174,7 +174,8 @@
             transform: scale(var(--scale), var(--scale));
             z-index: 2;
 
-            & .videoThumbnail {
+            .videoThumbnail,
+            .delete {
               opacity: 1;
             }
           }
@@ -213,6 +214,32 @@
                 transform: scale(1.3, 1.3) rotate(360deg);
                 color: whitesmoke;
               }
+            }
+          }
+
+          .delete {
+            display: inline-block;
+            height: 25px;
+            width: 25px;
+            border: none;
+            cursor: pointer;
+            transition: 0.4s;
+            position: absolute;
+            top: 165px;
+            right: 10px;
+            opacity: 0;
+
+            &:hover {
+              transform: scale(1.2, 1.2);
+              background-color: red;
+
+              & span svg {
+                color: white;
+              }
+            }
+
+            & span svg {
+              opacity: 0.8;
             }
           }
 

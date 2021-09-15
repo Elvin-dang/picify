@@ -1,4 +1,5 @@
 import {
+  DeleteFilled,
   DownloadOutlined,
   LinkOutlined,
   PlayCircleFilled,
@@ -15,6 +16,7 @@ import { getVideoAsyncAction, VideoType } from "./Video.slice";
 import { kontext } from "./kontext";
 import { toTimeString } from "@utils/time";
 import { byteToString } from "@utils/string";
+import AddVideoModal from "./components/AddVideoModal";
 
 interface Props {
   uid: string;
@@ -121,6 +123,9 @@ const Video = ({
                     }}
                   />
                 </div>
+                <button className="delete">
+                  <DeleteFilled />
+                </button>
                 <div className="videoCardFooter">
                   <div className="name">{video.name}</div>
                   <div className="descriptionWrapper">
@@ -202,6 +207,10 @@ const Video = ({
           </div>
         </div>
       </div>
+      <AddVideoModal
+        open={openAddVideoModal}
+        handleCancel={() => setOpenAddVideoModal(false)}
+      />
     </div>
   );
 };

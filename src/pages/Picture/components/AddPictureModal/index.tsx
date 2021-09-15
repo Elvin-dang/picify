@@ -93,7 +93,7 @@ const AddPictureModal = ({
 
   return (
     <Modal
-      style={{ top: 50, borderRadius: "30px" }}
+      style={{ top: 50 }}
       visible={open}
       onCancel={uploadingPicture === "uploading" ? undefined : handleCancel}
       closable={false}
