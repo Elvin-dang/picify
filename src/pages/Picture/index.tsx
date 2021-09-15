@@ -20,11 +20,11 @@ import "./styles.scss";
 import {
   deletePictureAsyncAction,
   getPictureAsyncAction,
-  PicturesType,
+  PictureType,
 } from "./Picture.slice";
 interface Props {
   uid: string;
-  pictures: PicturesType[];
+  pictures: PictureType[];
   fetchingPicture: boolean;
   deletingPicture: "none" | "deleting" | "complete";
   dispatch: AppDispatch;
@@ -61,7 +61,7 @@ const Home = ({
     message.success("Copied !!");
   };
 
-  const downloadImage = async (picture: PicturesType) => {
+  const downloadImage = async (picture: PictureType) => {
     const image = await fetch(picture.url);
     const imageBlog = await image.blob();
     const imageURL = URL.createObjectURL(imageBlog);

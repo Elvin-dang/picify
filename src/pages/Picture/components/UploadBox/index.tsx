@@ -48,9 +48,9 @@ const UploadBox = ({
   };
 
   const handleRemoveImage = () => {
+    if (ref.current) ref.current.value = "";
     handleSetPreviewImage(undefined);
     handleSetImage(undefined);
-
     handleSetImageName(undefined);
     handleSetCustomName(undefined);
   };
@@ -95,11 +95,7 @@ const UploadBox = ({
           </Tooltip>
         </div>
       ) : null}
-      <button
-        id="UBCustomButton"
-        onClick={() => ref.current?.click()}
-        // style={previewImage ? { marginTop: "20px" } : { marginTop: "20px" }}
-      >
+      <button id="UBCustomButton" onClick={() => ref.current?.click()}>
         Choose a image
       </button>
     </div>

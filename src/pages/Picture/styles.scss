@@ -2,322 +2,323 @@
 
 .homeContainer {
   padding: 1rem;
-}
 
-.actionWrapper {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-around;
-}
-
-.imageArea {
-  --spacing: 1rem;
-  --columns: 1;
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: calc(-1 * var(--spacing));
-
-  & .imageCard.skeleton {
-    display: none;
-    width: calc(calc(100% / 1) - var(--spacing));
-
-    &:nth-child(1) {
-      display: flex;
-    }
-  }
-
-  & .empty {
-    width: 100%;
+  .actionWrapper {
+    margin-bottom: 1rem;
+    padding: 1rem;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 30vh;
-
-    & .ant-empty .ant-empty-image img {
-      margin: 0 auto;
-    }
-
-    & .emptyDescription {
-      color: white;
-      font-family: "Open Sans Condensed", sans-serif;
-      font-weight: 800;
-      line-height: 3rem;
-      font-size: 3rem;
-    }
+    justify-content: space-around;
   }
-}
 
-@include Responsive(SM) {
   .imageArea {
-    --columns: 2;
-
-    & .imageCard {
-      --scale: 1.125;
-
-      &.skeleton {
-        width: calc(calc(100% / 2) - var(--spacing));
-
-        &:nth-child(2) {
-          display: flex;
-        }
-      }
-    }
-  }
-}
-
-@include Responsive(MD) {
-  .imageArea {
-    --columns: 3;
-
-    & .imageCard {
-      --scale: 1.15;
-
-      &.skeleton {
-        width: calc(calc(100% / 3) - var(--spacing));
-
-        &:nth-child(3) {
-          display: flex;
-        }
-      }
-    }
-  }
-}
-
-@include Responsive(XL) {
-  .imageArea {
-    --columns: 4;
-
-    & .imageCard {
-      --scale: 1.175;
-
-      &.skeleton {
-        width: calc(calc(100% / 4) - var(--spacing));
-
-        &:nth-child(4) {
-          display: flex;
-        }
-      }
-    }
-  }
-}
-
-@include Responsive(XXL) {
-  .imageArea {
-    --columns: 5;
-
-    & .imageCard {
-      --scale: 1.2;
-    }
-  }
-}
-
-.imageCard {
-  display: flex;
-  flex-direction: column;
-  width: calc(calc(100% / var(--columns)) - var(--spacing));
-  border-radius: 30px;
-  text-align: center;
-  margin-left: var(--spacing);
-  margin-bottom: var(--spacing);
-  background-color: whitesmoke;
-  transition: 0.3s;
-  position: relative;
-
-  --scale: 1.1;
-
-  &:hover {
-    transform: scale(var(--scale), var(--scale));
-    z-index: 2;
-
-    & .shotThumbnail {
-      opacity: 1;
-    }
-  }
-
-  & .shotThumbnail {
-    position: absolute;
-    height: 200px;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    --spacing: 1rem;
+    --columns: 1;
     display: flex;
-    flex-direction: column;
-    padding: 0.5rem 2rem;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    backface-visibility: hidden;
+    flex-wrap: wrap;
+    margin-left: calc(-1 * var(--spacing));
 
-    & .magnifying {
-      flex: 3;
+    & .imageCard.skeleton {
+      display: none;
+      width: calc(calc(100% / 1) - var(--spacing));
+
+      &:nth-child(1) {
+        display: flex;
+      }
+    }
+
+    & .empty {
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 30vh;
 
-      & span {
-        cursor: pointer;
-        font-size: 5rem;
-        transition: 0.5s ease;
-        color: rgba($color: #fff, $alpha: 0.5);
+      & .ant-empty .ant-empty-image img {
+        margin: 0 auto;
+      }
 
-        &:hover {
-          transform: scale(1.3, 1.3) rotate(360deg);
-          color: whitesmoke;
-        }
-
-        & svg {
-          filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
-        }
+      & .emptyDescription {
+        color: white;
+        font-family: "Open Sans Condensed", sans-serif;
+        font-weight: 800;
+        line-height: 3rem;
+        font-size: 3rem;
       }
     }
 
-    & .shotThumbnailContent {
+    .imageCard {
       display: flex;
-      flex: 1;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 1;
+      flex-direction: column;
+      width: calc(calc(100% / var(--columns)) - var(--spacing));
+      border-radius: 30px;
+      text-align: center;
+      margin-left: var(--spacing);
+      margin-bottom: var(--spacing);
+      background-color: whitesmoke;
+      transition: 0.3s;
+      position: relative;
 
-      & .shotTitle {
-        overflow: hidden;
-        padding-right: 1rem;
+      --scale: 1.1;
 
-        & .shotName {
-          color: white;
-          font-size: 1.6rem;
-          font-weight: 700;
-          font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica,
-            Arial, sans-serif;
-          line-height: 2.2rem;
-          overflow: inherit;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          text-align: start;
-        }
+      &:hover {
+        transform: scale(var(--scale), var(--scale));
+        z-index: 2;
 
-        & .shotTime {
-          color: white;
-          font-size: 1.2rem;
-          font-weight: 500;
-          font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica,
-            Arial, sans-serif;
-          line-height: 2rem;
-          overflow: inherit;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          text-align: start;
+        & .shotThumbnail {
+          opacity: 1;
         }
       }
 
-      & .action {
-        border: none;
-        cursor: pointer;
-        transition: 0.4s;
+      & .shotThumbnail {
+        position: absolute;
+        height: 200px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem 2rem;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        backface-visibility: hidden;
 
-        &:hover {
-          transform: scale(1.2, 1.2);
-          background-color: red;
+        & .magnifying {
+          flex: 3;
+          display: flex;
+          justify-content: center;
+          align-items: center;
 
-          & span svg {
+          & span {
+            cursor: pointer;
+            font-size: 5rem;
+            transition: 0.5s ease;
+            color: rgba($color: #fff, $alpha: 0.5);
+
+            &:hover {
+              transform: scale(1.3, 1.3) rotate(360deg);
+              color: whitesmoke;
+            }
+
+            & svg {
+              filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+            }
+          }
+        }
+
+        & .shotThumbnailContent {
+          display: flex;
+          flex: 1;
+          justify-content: space-between;
+          align-items: center;
+          z-index: 1;
+
+          & .shotTitle {
+            overflow: hidden;
+            padding-right: 1rem;
+
+            & .shotName {
+              color: white;
+              font-size: 1.6rem;
+              font-weight: 700;
+              font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica,
+                Arial, sans-serif;
+              line-height: 2.2rem;
+              overflow: inherit;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              text-align: start;
+            }
+
+            & .shotTime {
+              color: white;
+              font-size: 1.2rem;
+              font-weight: 500;
+              font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica,
+                Arial, sans-serif;
+              line-height: 2rem;
+              overflow: inherit;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              text-align: start;
+            }
+          }
+
+          & .action {
+            border: none;
+            cursor: pointer;
+            transition: 0.4s;
+
+            &:hover {
+              transform: scale(1.2, 1.2);
+              background-color: red;
+
+              & span svg {
+                color: white;
+              }
+            }
+
+            & span svg {
+              opacity: 0.8;
+            }
+          }
+        }
+
+        &::before {
+          content: "";
+          border-radius: 30px 30px 0 0;
+          position: absolute;
+          height: 200px;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          pointer-events: none;
+          background: linear-gradient(
+            180deg,
+            transparent 62%,
+            rgba(0, 0, 0, 0.00345888) 63.94%,
+            rgba(0, 0, 0, 0.014204) 65.89%,
+            rgba(0, 0, 0, 0.0326639) 67.83%,
+            rgba(0, 0, 0, 0.0589645) 69.78%,
+            rgba(0, 0, 0, 0.0927099) 71.72%,
+            rgba(0, 0, 0, 0.132754) 73.67%,
+            rgba(0, 0, 0, 0.177076) 75.61%,
+            rgba(0, 0, 0, 0.222924) 77.56%,
+            rgba(0, 0, 0, 0.267246) 79.5%,
+            rgba(0, 0, 0, 0.30729) 81.44%,
+            rgba(0, 0, 0, 0.341035) 83.39%,
+            rgba(0, 0, 0, 0.367336) 85.33%,
+            rgba(0, 0, 0, 0.385796) 87.28%,
+            rgba(0, 0, 0, 0.396541) 89.22%,
+            rgba(0, 0, 0, 0.4) 91.17%
+          );
+        }
+      }
+
+      & img {
+        border-radius: 30px 30px 0 0;
+        height: 200px;
+        width: 100%;
+        overflow: hidden;
+        object-fit: cover;
+        margin-bottom: 1rem;
+      }
+
+      & .imageCardFooter {
+        margin: 1rem auto;
+        margin-top: auto;
+        display: flex;
+        padding: 0 0.5rem;
+        flex-wrap: wrap;
+
+        & button {
+          flex: 1 1 auto;
+          margin: 0.5rem;
+          border-radius: 30px;
+          border: none;
+          cursor: pointer;
+          font-weight: bolder;
+          transition: 200ms ease-out;
+          background: linear-gradient(
+            to right bottom,
+            rgba(255, 255, 255, 0.9),
+            rgba(255, 255, 255, 0.5)
+          );
+
+          &:hover {
+            background-color: rgb(199, 199, 199);
             color: white;
           }
         }
 
-        & span svg {
-          opacity: 0.8;
+        // Use for button skeleton
+        & div {
+          flex: 1 1 auto;
+          margin-top: 1rem;
+          min-width: 30%;
+          padding: 0.5rem;
+
+          & span {
+            width: 100%;
+          }
+        }
+      }
+
+      // Use for image skeleton
+      & > div {
+        width: 100%;
+        border-radius: 30px 30px 0 0;
+        overflow: hidden;
+
+        & .ant-skeleton-image {
+          width: 100%;
         }
       }
     }
-
-    &::before {
-      content: "";
-      border-radius: 30px 30px 0 0;
-      position: absolute;
-      height: 200px;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-      background: linear-gradient(
-        180deg,
-        transparent 62%,
-        rgba(0, 0, 0, 0.00345888) 63.94%,
-        rgba(0, 0, 0, 0.014204) 65.89%,
-        rgba(0, 0, 0, 0.0326639) 67.83%,
-        rgba(0, 0, 0, 0.0589645) 69.78%,
-        rgba(0, 0, 0, 0.0927099) 71.72%,
-        rgba(0, 0, 0, 0.132754) 73.67%,
-        rgba(0, 0, 0, 0.177076) 75.61%,
-        rgba(0, 0, 0, 0.222924) 77.56%,
-        rgba(0, 0, 0, 0.267246) 79.5%,
-        rgba(0, 0, 0, 0.30729) 81.44%,
-        rgba(0, 0, 0, 0.341035) 83.39%,
-        rgba(0, 0, 0, 0.367336) 85.33%,
-        rgba(0, 0, 0, 0.385796) 87.28%,
-        rgba(0, 0, 0, 0.396541) 89.22%,
-        rgba(0, 0, 0, 0.4) 91.17%
-      );
-    }
   }
 
-  & img {
-    border-radius: 30px 30px 0 0;
-    height: 200px;
-    width: 100%;
-    overflow: hidden;
-    object-fit: cover;
-    margin-bottom: 1rem;
-  }
+  @include Responsive(SM) {
+    .imageArea {
+      --columns: 2;
 
-  & .imageCardFooter {
-    margin: 1rem auto;
-    margin-top: auto;
-    display: flex;
-    padding: 0 0.5rem;
-    flex-wrap: wrap;
+      & .imageCard {
+        --scale: 1.125;
 
-    & button {
-      flex: 1 1 auto;
-      margin: 0.5rem;
-      border-radius: 30px;
-      border: none;
-      cursor: pointer;
-      font-weight: bolder;
-      transition: 200ms ease-out;
-      background: linear-gradient(
-        to right bottom,
-        rgba(255, 255, 255, 0.9),
-        rgba(255, 255, 255, 0.5)
-      );
+        &.skeleton {
+          width: calc(calc(100% / 2) - var(--spacing));
 
-      &:hover {
-        background-color: rgb(199, 199, 199);
-        color: white;
-      }
-    }
-
-    // Use for button skeleton
-    & div {
-      flex: 1 1 auto;
-      margin: 0.5rem;
-      min-width: 30%;
-
-      & span {
-        width: 100%;
+          &:nth-child(2) {
+            display: flex;
+          }
+        }
       }
     }
   }
 
-  // Use for image skeleton
-  & > div {
-    width: 100%;
-    border-radius: 30px 30px 0 0;
-    overflow: hidden;
+  @include Responsive(MD) {
+    .imageArea {
+      --columns: 3;
 
-    & .ant-skeleton-image {
-      width: 100%;
+      & .imageCard {
+        --scale: 1.15;
+
+        &.skeleton {
+          width: calc(calc(100% / 3) - var(--spacing));
+
+          &:nth-child(3) {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
+
+  @include Responsive(XL) {
+    .imageArea {
+      --columns: 4;
+
+      & .imageCard {
+        --scale: 1.175;
+
+        &.skeleton {
+          width: calc(calc(100% / 4) - var(--spacing));
+
+          &:nth-child(4) {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
+
+  @include Responsive(XXL) {
+    .imageArea {
+      --columns: 5;
+
+      & .imageCard {
+        --scale: 1.2;
+      }
     }
   }
 }

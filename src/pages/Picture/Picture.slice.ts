@@ -10,7 +10,7 @@ import {
 } from "firebase/storage";
 import { storage } from "../../config/firebase";
 
-export interface PicturesType {
+export interface PictureType {
   name: string;
   url: string;
   updateAt: string;
@@ -20,7 +20,7 @@ export interface PicturesType {
 }
 
 export interface PictureState {
-  pictures: PicturesType[];
+  pictures: PictureType[];
   fetchingPicture: boolean;
   uploadingPicture: "none" | "uploading" | "complete";
   uploadProgress: number;
@@ -157,7 +157,7 @@ const PictureSlice = createSlice({
     resetPictureState: () => {
       return initialState;
     },
-    addPictureComplete: (state, action: PayloadAction<PicturesType>) => {
+    addPictureComplete: (state, action: PayloadAction<PictureType>) => {
       const duplicatePictureIndex = state.pictures.findIndex(
         (picture) => picture.name === action.payload.name,
       );
@@ -174,7 +174,7 @@ const PictureSlice = createSlice({
     },
     [getPictureAsyncAction.fulfilled.toString()]: (
       state,
-      action: PayloadAction<PicturesType[]>,
+      action: PayloadAction<PictureType[]>,
     ) => {
       state.pictures = action.payload;
       state.fetchingPicture = false;

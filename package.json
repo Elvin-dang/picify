@@ -35,7 +35,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject",
-    "deploy": "serve -s build"
+    "build-dev": "craco build && node server.js"
   },
   "eslintConfig": {
     "extends": [

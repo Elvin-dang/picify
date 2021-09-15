@@ -21,7 +21,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { connect } from "react-redux";
 import { AppDispatch, RootState } from "../../../../config/store";
 import ConfirmModal from "../../../../shared/components/ConfirmModal";
-import { PicturesType } from "../../../Picture/Picture.slice";
+import { PictureType } from "../../../Picture/Picture.slice";
 import "./styles.scss";
 import { auth, storage } from "../../../../config/firebase";
 import { updateProfile } from "@firebase/auth";
@@ -43,7 +43,7 @@ const img: CSSProperties = {
 interface Props {
   photoURL: string | null;
   openEditAvatarModal: boolean;
-  pictures: PicturesType[];
+  pictures: PictureType[];
   uid: string;
   onCancel: () => void;
   dispatch: AppDispatch;

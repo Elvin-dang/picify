@@ -2,12 +2,12 @@ import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import React from "react";
 import "./styles.scss";
 import { useRef } from "react";
-import { PicturesType } from "../../Picture.slice";
+import { PictureType } from "../../Picture.slice";
 
 interface Props {
   open: boolean;
   handleCancel: () => void;
-  picture?: PicturesType;
+  picture?: PictureType;
   handleNextPicture: () => void;
   handlePreviousPicture: () => void;
 }
