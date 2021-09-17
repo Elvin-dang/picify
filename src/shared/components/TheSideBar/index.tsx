@@ -59,10 +59,10 @@ const TheSideBar = ({ photoURL, displayName, email }: Props) => {
       </div>
       <div className="logoGroup">
         <Link to="/" className="logoIcon">
-          <img src="/main_logo.png" alt="" />
+          <img src="main_logo.png" alt="" />
         </Link>
         <Link to="/" className="logo">
-          <img src="/main_logo.png" alt="" />
+          <img src="main_logo.png" alt="" />
           <Typography.Title level={1} id="logoText">
             icify
           </Typography.Title>
