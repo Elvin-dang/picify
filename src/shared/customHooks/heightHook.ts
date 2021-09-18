@@ -12,14 +12,11 @@ export default function useRefHeight(
       new ResizeObserver((entries) => {
         for (let entry of entries) {
           if (entry.contentBoxSize) {
-            console.log("1");
             const contentBoxSize: any = Array.isArray(entry.contentBoxSize)
               ? entry.contentBoxSize[0]
               : entry.contentBoxSize;
 
             setHeight(contentBoxSize.blockSize + padding * 2);
-          } else {
-            console.log("2");
           }
         }
       }),
