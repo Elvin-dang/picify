@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import { AppDispatch, RootState } from "@config/store";
 import { Empty, message, Skeleton } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import "./styles.scss";
 import {
@@ -24,6 +24,7 @@ import { toDurationString, toTimeString } from "@utils/time";
 import { byteToString } from "@utils/string";
 import AddVideoModal from "./components/AddVideoModal";
 import ConfirmModal from "@shared/components/ConfirmModal";
+import { useRefHeight } from "@shared/customHooks";
 
 interface Props {
   uid: string;
@@ -46,8 +47,15 @@ const Video = ({
   const [selectedVideo, setSelectedVideo] = useState<VideoType>();
 
   const ref = useRef<HTMLDivElement>(null);
+  const layerOne = useRef<HTMLDivElement>(null);
+  const layerTwo = useRef<HTMLDivElement>(null);
   const contextRef = useRef<any>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const [layerTuple, setLayerTuple] = useState<
+    (RefObject<HTMLDivElement> | undefined)[]
+  >([layerOne, undefined]);
+  const dynamicHeight = useRefHeight(20, layerTuple[0], layerTuple[1]);
 
   useEffect(() => {
     dispatch(getVideoAsyncAction(uid));
@@ -89,8 +97,8 @@ const Video = ({
   };
 
   return (
-    <div className="videoContainer" ref={ref}>
-      <div className="layer one show">
+    <div className="videoContainer" ref={ref} style={{ height: dynamicHeight }}>
+      <div className="layer one show" ref={layerOne}>
         <div className="actionWrapper">
           {fetchingVideo ? (
             <Skeleton.Button active />
@@ -157,6 +165,7 @@ const Video = ({
                   <PlayCircleFilled
                     onClick={() => {
                       contextRef.current.show(1);
+                      setLayerTuple([layerTwo, layerOne]);
                       setSelectedVideo(video);
                     }}
                   />
@@ -192,7 +201,7 @@ const Video = ({
           )}
         </div>
       </div>
-      <div className="layer two">
+      <div className="layer two" ref={layerTwo}>
         <div className="videoContentWrapper">
           <div className="videoContent">
             {videos.length > 0 ? (
@@ -205,6 +214,7 @@ const Video = ({
                 <RollbackOutlined
                   onClick={() => {
                     contextRef.current.show(0);
+                    setLayerTuple([layerOne, layerTwo]);
                     if (videoRef.current) {
                       videoRef.current.pause();
                     }
