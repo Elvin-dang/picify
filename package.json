@@ -1,5 +1,4 @@
 {
-  "homepage": "https://elvin-dang.github.io/picify",
   "name": "picify",
   "version": "0.1.0",
   "private": true,
@@ -57,7 +56,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "gh-pages": "^3.2.3"
-  }
+  "devDependencies": {}
 }
