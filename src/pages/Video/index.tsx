@@ -103,14 +103,9 @@ const Video = ({
           {fetchingVideo ? (
             <Skeleton.Button active />
           ) : (
-            <>
-              <button
-                className="push"
-                onClick={() => setOpenAddVideoModal(true)}
-              >
-                <VideoCameraAddOutlined /> Push
-              </button>
-            </>
+            <button className="push" onClick={() => setOpenAddVideoModal(true)}>
+              <VideoCameraAddOutlined /> Add
+            </button>
           )}
         </div>
         <div className="videoArea">

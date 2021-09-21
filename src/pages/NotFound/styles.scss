@@ -1,0 +1,53 @@
+.notfoundContainer {
+  width: 100%;
+  --primary-color: #13008d;
+  --secondary-color: rgb(107, 85, 255);
+  --button-color: #6d5ae9;
+
+  .cardContainer {
+    padding: 2rem;
+    background: linear-gradient(
+      to right bottom,
+      rgba(255, 255, 255, 0.7),
+      rgba(255, 255, 255, 0.3)
+    );
+    height: auto;
+    width: 80%;
+    margin: 4rem auto 0 auto;
+    border-radius: 30px;
+    text-align: center;
+    font-family: "Gluten", cursive;
+
+    img {
+      height: 300px;
+      margin: 0 auto;
+    }
+
+    .title {
+      font-size: 4rem;
+      color: var(--primary-color);
+    }
+
+    .description {
+      font-size: 1.5rem;
+      color: var(--secondary-color);
+      margin-bottom: 3rem;
+    }
+
+    button {
+      outline: none;
+      color: white;
+      background-color: var(--button-color);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 3rem;
+      transition: 0.3s;
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.1, 1.1);
+        padding: 1rem 4rem;
+      }
+    }
+  }
+}

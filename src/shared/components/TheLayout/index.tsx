@@ -29,29 +29,35 @@ const TheLayout = ({ photoURL, dispatch }: Props) => {
   const [shouldRender, setShouldRender] = useState<boolean>(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const token = await user.getIdToken();
-        dispatch(
-          setUserState({
-            accessToken: token,
-            displayName: user.displayName,
-            email: user.email,
-            emailVerified: user.emailVerified,
-            photoURL: user.photoURL,
-            uid: user.uid,
-          }),
-        );
-        setShouldRender(true);
-      } else {
+    if (
+      routes.findIndex((route) => route.path === history.location.pathname) > -1
+    ) {
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          const token = await user.getIdToken();
+          dispatch(
+            setUserState({
+              accessToken: token,
+              displayName: user.displayName,
+              email: user.email,
+              emailVerified: user.emailVerified,
+              photoURL: user.photoURL,
+              uid: user.uid,
+            }),
+          );
+          setShouldRender(true);
+        } else {
+          setShouldRender(false);
+          history.push("/sign-in", { from: history.location });
+        }
+      });
+      return () => {
         setShouldRender(false);
-        history.push("/sign-in", { from: history.location });
-      }
-    });
-    return () => {
-      setShouldRender(false);
-      unsubscribe();
-    };
+        unsubscribe();
+      };
+    } else {
+      history.push("/notfound");
+    }
   }, [history, dispatch]);
 
   const handleLogout = async () => {

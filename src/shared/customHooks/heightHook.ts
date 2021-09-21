@@ -30,6 +30,10 @@ export default function useRefHeight(
     if (unusedRef && unusedRef.current) {
       observer.unobserve(unusedRef.current);
     }
+
+    return () => {
+      observer.disconnect();
+    };
   }, [ref, observer, unusedRef]);
 
   return height;

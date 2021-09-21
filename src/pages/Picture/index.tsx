@@ -1,13 +1,13 @@
 import {
+  CameraOutlined,
   DeleteFilled,
   DeleteOutlined,
   DownloadOutlined,
   LinkOutlined,
   LoadingOutlined,
-  PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Button, Empty, message, Skeleton } from "antd";
+import { Empty, message, Skeleton } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 import { connect } from "react-redux";
@@ -92,14 +92,11 @@ const Home = ({
     <div className="homeContainer">
       <div className="actionWrapper">
         {fetchingPicture ? (
-          <Skeleton.Button shape="circle" active />
+          <Skeleton.Button active />
         ) : (
-          <Button
-            type="primary"
-            shape="circle"
-            icon={<PlusOutlined />}
-            onClick={() => setOpenAddPictureModal(true)}
-          ></Button>
+          <button className="push" onClick={() => setOpenAddPictureModal(true)}>
+            <CameraOutlined /> Add
+          </button>
         )}
       </div>
       <div className="imageArea">
