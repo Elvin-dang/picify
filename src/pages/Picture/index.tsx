@@ -89,7 +89,7 @@ const Home = ({
   };
 
   return (
-    <div className="homeContainer">
+    <div className="pictureContainer">
       <div className="actionWrapper">
         {fetchingPicture ? (
           <Skeleton.Button active />
