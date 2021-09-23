@@ -5,7 +5,7 @@ import { Route, Switch, useHistory } from "react-router-dom";
 import { auth } from "../../../config/firebase";
 import { connect } from "react-redux";
 import { setUserState } from "../../slices/user.slice";
-import routes from "../../../config/routes";
+import { privateRoutes } from "../../../config/routes";
 import { PageHeader, Spin, Typography } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import "./styles.scss";
@@ -30,7 +30,9 @@ const TheLayout = ({ photoURL, dispatch }: Props) => {
 
   useEffect(() => {
     if (
-      routes.findIndex((route) => route.path === history.location.pathname) > -1
+      privateRoutes.findIndex(
+        (route) => route.path === history.location.pathname,
+      ) > -1
     ) {
       const unsubscribe = onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -123,7 +125,7 @@ const TheLayout = ({ photoURL, dispatch }: Props) => {
             }
           >
             <Switch>
-              {routes.map((route, index) => (
+              {privateRoutes.map((route, index) => (
                 <Route
                   key={index}
                   path={route.path}
