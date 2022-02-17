@@ -11,6 +11,7 @@
   }
   &__img {
     justify-self: center;
+
     & img {
       width: 35rem;
       margin-top: 2.4rem;
@@ -229,7 +230,7 @@
       transition: 1s ease-out;
 
       &:hover {
-        transform: translateX(-7rem) rotateY(20deg);
+        transform: perspective(1000px) translateX(-7rem) rotateY(20deg);
 
         & ~ .login__forms .login__create,
         ~ .login__forms .login__registre {
