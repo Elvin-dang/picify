@@ -68,7 +68,7 @@ const AddVideoModal = ({
 
   const handleUpload = () => {
     if (video && (video.type === "video/mp4" || video.type === "video/x-m4v")) {
-      if (video.size <= 50 * Math.pow(1024, 2)) {
+      if (video.size <= 100 * Math.pow(1024, 2)) {
         if (
           videos.findIndex((videoItem) =>
             customName
@@ -89,7 +89,7 @@ const AddVideoModal = ({
           );
         }
       } else {
-        message.error("Video size must be smaller than 50MB");
+        message.error("Video size must be smaller than 100MB");
       }
     } else {
       message.error("File must be video (mp4, x-m4v)");
