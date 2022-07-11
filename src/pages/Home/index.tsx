@@ -19,8 +19,8 @@ const Home = (props: Props) => {
         Explore <span>picify</span> now
       </h1>
       <p className="description">
-        Store, share, and collaborate on picture and video from any mobile
-        device, tablet, or computer
+        Store, share, and collaborate on pictures and videos in multi-devices,
+        tablet, or computer
       </p>
       <button className="showMe" onClick={() => history.push("/profile")}>
         Show Me

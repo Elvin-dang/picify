@@ -28,7 +28,7 @@ const Input = ({
         className={error ? "picify-custom-input error" : "picify-custom-input"}
         style={
           {
-            "--text-indent": `${35 + (label.length - 1) * 12.109}px`,
+            "--text-indent": `${45 + (label.length - 1) * 12.109}px`,
             "--color": color ? color : "#377d6a",
           } as any
         }
